@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definition>
+    <import>
+        <package>com.liferay.ide.eclipse.pml.core.model</package>
+        <package>com.liferay.ide.eclipse.pml.ui.editor.action</package>
+        <package>com.liferay.ide.eclipse.pml.ui.editor.internal</package>
+    </import>
+    <editor-page>
+        <id>DetailsPage</id>
+        <page-header-text>Portal Markup Language</page-header-text>
+    </editor-page>
+</definition>
