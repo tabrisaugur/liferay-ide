@@ -23,6 +23,7 @@ import org.eclipse.sapphire.modeling.ModelElementType;
 import org.eclipse.sapphire.modeling.Value;
 import org.eclipse.sapphire.modeling.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
+import org.eclipse.sapphire.modeling.annotations.Image;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.Type;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
@@ -33,7 +34,8 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlRootBinding;
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
  */
 @GenerateImpl
-@XmlRootBinding( namespace = "http://www.liferay.com/pml/1.0", schemaLocation = "schema/pml_1.0.xsd", elementName = "portal" )
+@XmlRootBinding( elementName = "portal",namespace="http://www.liferay.com/pml/1.0" )
+@Image( path = "images/elcl16/portal_16x16.png" )
 public interface IPortal extends ICommonProperties {
 
 	ModelElementType TYPE = new ModelElementType( IPortal.class );
@@ -61,8 +63,8 @@ public interface IPortal extends ICommonProperties {
 	// *** Organizations ***
 
 	@Type( base = IOrganization.class )
-	@Label( standard = "Organiations" )
-	@XmlListBinding( mappings = { @XmlListBinding.Mapping( element = "organizations", type = IOrganization.class ) } )
+	@Label( standard = "Organizations" )
+	@XmlListBinding( path = "organizations", mappings = { @XmlListBinding.Mapping( element = "organization", type = IOrganization.class ) } )
 	ListProperty PROP_ORGANIZATIONS = new ListProperty( TYPE, "Organizations" );
 
 	ModelElementList<IOrganization> getOrganizations();
@@ -71,7 +73,7 @@ public interface IPortal extends ICommonProperties {
 
 	@Type( base = ISite.class )
 	@Label( standard = "Sites" )
-	@XmlListBinding( mappings = { @XmlListBinding.Mapping( element = "sites", type = ISite.class ) } )
+	@XmlListBinding( path = "sites", mappings = { @XmlListBinding.Mapping( element = "site", type = ISite.class ) } )
 	ListProperty PROP_SITES = new ListProperty( TYPE, "Sites" );
 
 	ModelElementList<ISite> getSites();

@@ -18,14 +18,32 @@
 package com.liferay.ide.eclipse.pml.core.model;
 
 import org.eclipse.sapphire.modeling.ModelElementType;
+import org.eclipse.sapphire.modeling.Value;
+import org.eclipse.sapphire.modeling.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
+import org.eclipse.sapphire.modeling.annotations.Image;
+import org.eclipse.sapphire.modeling.annotations.Label;
+import org.eclipse.sapphire.modeling.annotations.Whitespace;
+import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
  */
 @GenerateImpl
-public interface ISite extends ICommonProperties {
+@Image( path = "images/elcl16/site_16x16.png" )
+public interface ISite extends ICommonProperties, IPageContainer {
 
 	ModelElementType TYPE = new ModelElementType( ISite.class );
+
+	// *** FriendlyUrl ***
+
+	@Label( standard = "Friendly Url" )
+	@XmlBinding( path = "@friendly-url" )
+	@Whitespace( trim = true )
+	ValueProperty PROP_FRIENDLY_URL = new ValueProperty( TYPE, "FriendlyUrl" );
+
+	Value<String> getFriendlyUrl();
+
+	void setFriendlyUrl( String value );
 
 }

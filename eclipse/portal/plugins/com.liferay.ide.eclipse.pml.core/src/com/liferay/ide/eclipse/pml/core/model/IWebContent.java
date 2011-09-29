@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Accenture Services Pvt Ltd., All rights reserved.
+ * Copyright (c) 2000-2011 Accenture Services Pvt. Ltd., All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -17,31 +17,33 @@
 
 package com.liferay.ide.eclipse.pml.core.model;
 
-import org.eclipse.sapphire.modeling.annotations.EnumSerialization;
+import org.eclipse.sapphire.modeling.IModelElement;
+import org.eclipse.sapphire.modeling.ModelElementType;
+import org.eclipse.sapphire.modeling.Value;
+import org.eclipse.sapphire.modeling.ValueProperty;
+import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Label;
+import org.eclipse.sapphire.modeling.annotations.Required;
+import org.eclipse.sapphire.modeling.annotations.Whitespace;
+import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
  */
-@Label( standard = "Page Type" )
-public enum PageType {
-	@Label( standard = "Portlet" )
-	@EnumSerialization( primary = "Portlet" )
-	PORTLET,
+@GenerateImpl
+public interface IWebContent extends IModelElement {
 
-	@Label( standard = "Web Content" )
-	@EnumSerialization( primary = "WebContent" )
-	WEBCONTENT,
+	ModelElementType TYPE = new ModelElementType( IWebContent.class );
 
-	@Label( standard = "URL" )
-	@EnumSerialization( primary = "URL" )
-	URL,
+	// *** Id ***
 
-	@Label( standard = "Embeded" )
-	@EnumSerialization( primary = "Embedded" )
-	EMBEDED, 
-	
-	@Label( standard = "Link to Page" )
-	@EnumSerialization( primary = "LinkToPage" )
-	LINKTOPAGE
+	@Label( standard = "Id" )
+	@XmlBinding( path = "@id" )
+	@Whitespace( trim = true )
+	@Required
+	ValueProperty PROP_ID = new ValueProperty( TYPE, "Id" );
+
+	Value<String> getId();
+
+	void setId( String value );
 }

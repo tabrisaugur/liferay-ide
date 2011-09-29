@@ -17,16 +17,30 @@
 
 package com.liferay.ide.eclipse.pml.core.model;
 
-
+import org.eclipse.sapphire.modeling.IModelElement;
+import org.eclipse.sapphire.modeling.ListProperty;
+import org.eclipse.sapphire.modeling.ModelElementList;
 import org.eclipse.sapphire.modeling.ModelElementType;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
+import org.eclipse.sapphire.modeling.annotations.Label;
+import org.eclipse.sapphire.modeling.annotations.Type;
+import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
 
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
  */
 @GenerateImpl
-public interface IWebContentType extends ICommonProperties {
+public interface IPageContainer extends IModelElement {
 
-	ModelElementType TYPE = new ModelElementType( IWebContentType.class );
+	ModelElementType TYPE = new ModelElementType( IPageContainer.class );
+
+	// *** Pages ***
+
+	@Type( base = IPage.class )
+	@Label( standard = "Page" )
+	@XmlListBinding(mappings = { @XmlListBinding.Mapping( element = "page", type = IPage.class ) } )
+	ListProperty PROP_PAGES = new ListProperty( TYPE, "Pages" );
+
+	ModelElementList<IPage> getPages();
 
 }

@@ -116,7 +116,6 @@
         <profile>
             <id>indigo</id>
             <activation>
-                
                 <property>
                     <name>platform-version-name</name>
                     <value>indigo</value>
@@ -179,8 +178,10 @@
 
         <module>portal/plugins/com.liferay.ide.eclipse.layouttpl.core</module>
         <module>portal/plugins/com.liferay.ide.eclipse.layouttpl.ui</module>
+		<module>portal/plugins/com.liferay.ide.eclipse.pml.core</module>
         <module>portal/plugins/com.liferay.ide.eclipse.portlet.core</module>
         <module>portal/plugins/com.liferay.ide.eclipse.portlet.jsf.core</module>
+		<module>portal/plugins/com.liferay.ide.eclipse.pml.ui</module>
         <module>portal/plugins/com.liferay.ide.eclipse.portlet.jsf.ui</module>
         <module>portal/plugins/com.liferay.ide.eclipse.portlet.ui</module>
         <module>portal/plugins/com.liferay.ide.eclipse.portlet.vaadin.core</module>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="com.liferay.ide.eclipse.pml.ui.editor.PMLEditor"
+            default="true"
+            filenames="*.pml"
+            id="com.liferay.ide.eclipse.pml.ui.PMLEditor"
+            name="Portlet Markup Language Editor">
+      </editor>
+      
+   </extension>
+   <extension
+         point="org.eclipse.core.contenttype.contentTypes">
+      <content-type
+            base-type="org.eclipse.core.runtime.xml"
+            default-charset="utf-8"
+            file-extensions="pml"
+            id="com.liferay.ide.eclipse.pml.ui.pml"
+            name="%pml.ext.name"
+            priority="normal">
+      </content-type>
+   </extension>
+
+</plugin>

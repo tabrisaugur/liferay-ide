@@ -17,16 +17,43 @@
 
 package com.liferay.ide.eclipse.pml.core.model;
 
-
+import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ModelElementType;
+import org.eclipse.sapphire.modeling.Value;
+import org.eclipse.sapphire.modeling.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
+import org.eclipse.sapphire.modeling.annotations.Label;
+import org.eclipse.sapphire.modeling.annotations.Whitespace;
+import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
  */
 @GenerateImpl
-public interface IEmbeddedType extends ICommonProperties {
+public interface IEmbeddedType extends IModelElement {
 
 	ModelElementType TYPE = new ModelElementType( IEmbeddedType.class );
+
+	// *** URL ***
+
+	@Label( standard = "URL" )
+	@Whitespace( trim = true )
+	@XmlBinding( path = "@url" )
+	ValueProperty PROP_URL = new ValueProperty( TYPE, "URL" );
+
+	Value<String> getURL();
+
+	void setURL( String value );
+
+	// *** Description ***
+
+	@Label( standard = "Description" )
+	@Whitespace( trim = true )
+	@XmlBinding( path = "description" )
+	ValueProperty PROP_DESCRIPTION = new ValueProperty( TYPE, "Description" );
+
+	Value<String> getDescription();
+
+	void setDescription( String value );
 
 }

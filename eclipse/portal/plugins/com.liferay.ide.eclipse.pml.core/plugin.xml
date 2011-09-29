@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.wst.xml.core.catalogContributions">
+      <catalogContribution
+            id="pml-1.0">
+         <system
+               systemId="http://www.liferay.com/pml/1.0"
+               uri="schema/pml_1.0.xsd">
+         </system>
+      </catalogContribution>
+   </extension>
+
+</plugin>

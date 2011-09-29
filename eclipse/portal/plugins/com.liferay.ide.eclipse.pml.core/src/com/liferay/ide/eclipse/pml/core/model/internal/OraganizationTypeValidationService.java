@@ -15,33 +15,34 @@
  *    Kamesh Sampath - initial implementation
  ******************************************************************************/
 
-package com.liferay.ide.eclipse.pml.core.model;
+package com.liferay.ide.eclipse.pml.core.model.internal;
 
-import org.eclipse.sapphire.modeling.ModelElementType;
+import com.liferay.ide.eclipse.pml.core.model.IOrganization;
+import com.liferay.ide.eclipse.pml.core.model.OrganizationType;
+
+import org.eclipse.sapphire.modeling.IModelElement;
+import org.eclipse.sapphire.modeling.ModelPropertyValidationService;
+import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.modeling.Value;
-import org.eclipse.sapphire.modeling.ValueProperty;
-import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
-import org.eclipse.sapphire.modeling.annotations.Label;
-import org.eclipse.sapphire.modeling.annotations.Whitespace;
-import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
  */
-@GenerateImpl
-public interface IPortletType extends ICommonProperties {
+public class OraganizationTypeValidationService extends ModelPropertyValidationService<Value<OrganizationType>> {
 
-	ModelElementType TYPE = new ModelElementType( IPortletType.class );
-
-	// *** LayoutColumn ***
-
-	@Label( standard = "Layout Column" )
-	@Whitespace( trim = true )
-	@XmlBinding( path = "layout-column" )
-	ValueProperty PROP_LAYOUT_COLUMN = new ValueProperty( TYPE, "LayoutColumn" );
-
-	Value<String> getLayoutColumn();
-
-	void setLayoutColumn( String value );
-
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.sapphire.modeling.ModelPropertyValidationService#validate()
+	 */
+	@Override
+	public Status validate() {
+		Value<OrganizationType> orgType = target();
+		OrganizationType eorgType = orgType.getContent();
+		IModelElement root = element();
+		if ( OrganizationType.REGULAR_ORGANIZATION.equals( eorgType ) ) {
+			root.write( IOrganization.PROP_COUNTRY, null );
+			root.write( IOrganization.PROP_REGION, null );
+		}
+		return Status.createOkStatus();
+	}
 }

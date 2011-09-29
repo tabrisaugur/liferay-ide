@@ -23,25 +23,14 @@ import org.eclipse.sapphire.modeling.annotations.Label;
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
  */
-@Label( standard = "Page Type" )
-public enum PageType {
-	@Label( standard = "Portlet" )
-	@EnumSerialization( primary = "Portlet" )
-	PORTLET,
+@Label( standard = "Organization Type" )
+public enum OrganizationType {
+	@Label( standard = "Regular Organization" )
+	@EnumSerialization( primary = "regular-organization" )
+	REGULAR_ORGANIZATION,
 
-	@Label( standard = "Web Content" )
-	@EnumSerialization( primary = "WebContent" )
-	WEBCONTENT,
+	@Label( standard = "Location" )
+	@EnumSerialization( primary = "location" )
+	LOCATION
 
-	@Label( standard = "URL" )
-	@EnumSerialization( primary = "URL" )
-	URL,
-
-	@Label( standard = "Embeded" )
-	@EnumSerialization( primary = "Embedded" )
-	EMBEDED, 
-	
-	@Label( standard = "Link to Page" )
-	@EnumSerialization( primary = "LinkToPage" )
-	LINKTOPAGE
 }
