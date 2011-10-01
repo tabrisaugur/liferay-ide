@@ -1,0 +1,52 @@
+IDE-454 Inital Model and UI Organization
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+# On branch IDE-454
+# Changes to be committed:
+#   (use "git reset HEAD <file>..." to unstage)
+#
+#	modified:   eclipse/pom.xml
+#	new file:   eclipse/portal/plugins/com.liferay.ide.eclipse.pml.core/.gitignore
+#	modified:   eclipse/portal/plugins/com.liferay.ide.eclipse.pml.core/.project
+#	modified:   eclipse/portal/plugins/com.liferay.ide.eclipse.pml.core/META-INF/MANIFEST.MF
+#	modified:   eclipse/portal/plugins/com.liferay.ide.eclipse.pml.core/build.properties
+#	new file:   eclipse/portal/plugins/com.liferay.ide.eclipse.pml.core/plugin.xml
+#	modified:   eclipse/portal/plugins/com.liferay.ide.eclipse.pml.core/pom.xml
+#	modified:   eclipse/portal/plugins/com.liferay.ide.eclipse.pml.core/src/com/liferay/ide/eclipse/pml/core/model/ICommonProperties.java
+#	modified:   eclipse/portal/plugins/com.liferay.ide.eclipse.pml.core/src/com/liferay/ide/eclipse/pml/core/model/IEmbeddedType.java
+#	new file:   eclipse/portal/plugins/com.liferay.ide.eclipse.pml.core/src/com/liferay/ide/eclipse/pml/core/model/ILinkToPage.java
+#	modified:   eclipse/portal/plugins/com.liferay.ide.eclipse.pml.core/src/com/liferay/ide/eclipse/pml/core/model/IOrganization.java
+#	modified:   eclipse/portal/plugins/com.liferay.ide.eclipse.pml.core/src/com/liferay/ide/eclipse/pml/core/model/IPage.java
+#	new file:   eclipse/portal/plugins/com.liferay.ide.eclipse.pml.core/src/com/liferay/ide/eclipse/pml/core/model/IPageContainer.java
+#	modified:   eclipse/portal/plugins/com.liferay.ide.eclipse.pml.core/src/com/liferay/ide/eclipse/pml/core/model/IPortal.java
+#	modified:   eclipse/portal/plugins/com.liferay.ide.eclipse.pml.core/src/com/liferay/ide/eclipse/pml/core/model/IPortletType.java
+#	modified:   eclipse/portal/plugins/com.liferay.ide.eclipse.pml.core/src/com/liferay/ide/eclipse/pml/core/model/ISite.java
+#	new file:   eclipse/portal/plugins/com.liferay.ide.eclipse.pml.core/src/com/liferay/ide/eclipse/pml/core/model/IWebContent.java
+#	renamed:    eclipse/portal/plugins/com.liferay.ide.eclipse.pml.core/src/com/liferay/ide/eclipse/pml/core/model/IWebContentType.java -> eclipse/portal/plugins/com.liferay.ide.eclipse.pml.core/src/com/liferay/ide/eclipse/pml/core/model/OrganizationType.java
+#	modified:   eclipse/portal/plugins/com.liferay.ide.eclipse.pml.core/src/com/liferay/ide/eclipse/pml/core/model/PageType.java
+#	new file:   eclipse/portal/plugins/com.liferay.ide.eclipse.pml.core/src/com/liferay/ide/eclipse/pml/core/model/internal/CountryPossibleValueService.java
+#	new file:   eclipse/portal/plugins/com.liferay.ide.eclipse.pml.core/src/com/liferay/ide/eclipse/pml/core/model/internal/InvertingBooleanXmlValueBinding.java
+#	new file:   eclipse/portal/plugins/com.liferay.ide.eclipse.pml.core/src/com/liferay/ide/eclipse/pml/core/model/internal/OraganizationTypeValidationService.java
+#	new file:   eclipse/portal/plugins/com.liferay.ide.eclipse.pml.core/src/com/liferay/ide/eclipse/pml/core/model/internal/PagePossibleValueService.java
+#	modified:   eclipse/portal/plugins/com.liferay.ide.eclipse.pml.ui/META-INF/MANIFEST.MF
+#	new file:   eclipse/portal/plugins/com.liferay.ide.eclipse.pml.ui/plugin.xml
+#	new file:   eclipse/portal/plugins/com.liferay.ide.eclipse.pml.ui/pom.xml
+#	modified:   eclipse/portal/plugins/com.liferay.ide.eclipse.pml.ui/src/com/liferay/ide/eclipse/pml/ui/editor/PMLEditor.java
+#	new file:   eclipse/portal/plugins/com.liferay.ide.eclipse.pml.ui/src/com/liferay/ide/eclipse/pml/ui/editor/internal/QuickActionsHandlerFactory.java
+#	new file:   eclipse/portal/plugins/com.liferay.ide.eclipse.pml.ui/src/com/liferay/ide/eclipse/pml/ui/editor/internal/QuickActionsHandlerFactory.properties
+#	modified:   eclipse/portal/plugins/com.liferay.ide.eclipse.pml.ui/src/com/liferay/ide/eclipse/pml/ui/editor/internal/pml-editor.sdef
+#
+# Untracked files:
+#   (use "git add <file>..." to include in what will be committed)
+#
+#	eclipse/portal/plugins/com.liferay.ide.eclipse.pml.core/.settings/org.eclipse.jdt.apt.core.prefs
+#	eclipse/portal/plugins/com.liferay.ide.eclipse.pml.core/META-INF/
+#	eclipse/portal/plugins/com.liferay.ide.eclipse.pml.core/OSGI-INF/
+#	eclipse/portal/plugins/com.liferay.ide.eclipse.pml.core/bin/
+#	eclipse/portal/plugins/com.liferay.ide.eclipse.pml.core/schema/
+#	eclipse/portal/plugins/com.liferay.ide.eclipse.pml.core/src/com/liferay/ide/eclipse/pml/core/model/
+#	eclipse/portal/plugins/com.liferay.ide.eclipse.pml.core/src/images/
+#	eclipse/portal/plugins/com.liferay.ide.eclipse.pml.ui/META-INF/
+#	eclipse/portal/plugins/com.liferay.ide.eclipse.pml.ui/bin/
+#	eclipse/portal/plugins/com.liferay.ide.eclipse.pml.ui/icons/
+#	eclipse/portal/plugins/com.liferay.ide.eclipse.pml.ui/src/com/liferay/ide/eclipse/pml/ui/editor/
