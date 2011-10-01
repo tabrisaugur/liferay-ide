@@ -17,6 +17,7 @@
 
 package com.liferay.ide.eclipse.pml.core.model;
 
+import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ListProperty;
 import org.eclipse.sapphire.modeling.ModelElementList;
 import org.eclipse.sapphire.modeling.ModelElementType;
@@ -25,7 +26,10 @@ import org.eclipse.sapphire.modeling.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Image;
 import org.eclipse.sapphire.modeling.annotations.Label;
+import org.eclipse.sapphire.modeling.annotations.NoDuplicates;
+import org.eclipse.sapphire.modeling.annotations.Required;
 import org.eclipse.sapphire.modeling.annotations.Type;
+import org.eclipse.sapphire.modeling.annotations.Whitespace;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlRootBinding;
@@ -34,31 +38,35 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlRootBinding;
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
  */
 @GenerateImpl
-@XmlRootBinding( elementName = "portal",namespace="http://www.liferay.com/pml/1.0" )
+@XmlRootBinding( elementName = "portal", namespace = "http://www.liferay.com/pml/1.0" )
 @Image( path = "images/elcl16/portal_16x16.png" )
-public interface IPortal extends ICommonProperties {
+public interface IPortal extends IModelElement {
 
 	ModelElementType TYPE = new ModelElementType( IPortal.class );
 
-	// *** Portal Admin User ***
+	// *** Id ***
 
-	@Label( standard = "Portal Admin User" )
-	@XmlBinding( path = "portal-admin-user" )
-	ValueProperty PROP_PORTAL_ADMIN_USER = new ValueProperty( TYPE, "PortalAdminUser" );
+	@Label( standard = "Id" )
+	@XmlBinding( path = "@id" )
+	@Whitespace( trim = true )
+	@NoDuplicates
+	ValueProperty PROP_ID = new ValueProperty( TYPE, "Id" );
 
-	Value<String> getPortalAdminUser();
+	Value<String> getId();
 
-	void setPortalAdminUser( String value );
+	void setId( String value );
 
-	// *** PortalAdminUserPassword ***
+	// *** Name ***
 
-	@Label( standard = "Portal Admin Password" )
-	@XmlBinding( path = "portal-admin-user-pwd" )
-	ValueProperty PROP_PORTAL_ADMIN_USER_PASSWORD = new ValueProperty( TYPE, "PortalAdminUserPassword" );
+	@Label( standard = "Company Name" )
+	@XmlBinding( path = "@name" )
+	@Whitespace( trim = true )
+	@Required
+	ValueProperty PROP_NAME = new ValueProperty( TYPE, "Name" );
 
-	Value<String> getPortalAdminUserPassword();
+	Value<String> getName();
 
-	void setPortalAdminUserPassword( String value );
+	void setName( String value );
 
 	// *** Organizations ***
 

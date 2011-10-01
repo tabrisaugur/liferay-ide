@@ -23,7 +23,6 @@ import org.eclipse.sapphire.modeling.Value;
 import org.eclipse.sapphire.modeling.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Label;
-import org.eclipse.sapphire.modeling.annotations.NoDuplicates;
 import org.eclipse.sapphire.modeling.annotations.Required;
 import org.eclipse.sapphire.modeling.annotations.Whitespace;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
@@ -40,9 +39,7 @@ public interface ICommonProperties extends IModelElement {
 
 	@Label( standard = "Id" )
 	@XmlBinding( path = "@id" )
-	@Whitespace( trim = true )
-	@Required
-	@NoDuplicates
+	@Whitespace( trim = true )	
 	ValueProperty PROP_ID = new ValueProperty( TYPE, "Id" );
 
 	Value<String> getId();

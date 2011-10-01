@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %Bundle-Name
 Bundle-SymbolicName: com.liferay.ide.eclipse.pml.core;singleton:=true
-Bundle-Version: 1.0.0.qualifier
+Bundle-Version: 1.4.0.qualifier
 Bundle-Activator: com.liferay.ide.eclipse.pml.core.PMLCorePlugin
 Bundle-Vendor: %Bundle-Vendor
 Require-Bundle: org.eclipse.ui,
@@ -14,7 +14,39 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.sapphire.workspace;bundle-version="0.3.0",
  org.eclipse.core.resources,
  org.eclipse.wst.sse.core;bundle-version="[1.1.402,2.0.0)";visibility:=reexport,
- org.eclipse.wst.xml.core;bundle-version="[1.1.402,2.0.0)";visibility:=reexport
+ org.eclipse.wst.xml.core;bundle-version="[1.1.402,2.0.0)";visibility:=reexport,
+ org.eclipse.wst.server.core;bundle-version="1.1.303",
+ org.apache.commons.collections;bundle-version="3.2.1",
+ org.apache.commons.lang;bundle-version="2.4.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
-Export-Package: com.liferay.ide.eclipse.pml.core.model
+Export-Package: com.liferay.ide.eclipse.pml.core,
+ com.liferay.ide.eclipse.pml.core.model,
+ com.liferay.ide.eclipse.pml.core.model.util,
+ org.apache.velocity,
+ org.apache.velocity.anakia,
+ org.apache.velocity.app,
+ org.apache.velocity.app.event,
+ org.apache.velocity.app.event.implement,
+ org.apache.velocity.app.tools,
+ org.apache.velocity.context,
+ org.apache.velocity.convert,
+ org.apache.velocity.exception,
+ org.apache.velocity.io,
+ org.apache.velocity.runtime,
+ org.apache.velocity.runtime.directive,
+ org.apache.velocity.runtime.log,
+ org.apache.velocity.runtime.parser,
+ org.apache.velocity.runtime.parser.node,
+ org.apache.velocity.runtime.resource,
+ org.apache.velocity.runtime.resource.loader,
+ org.apache.velocity.runtime.resource.util,
+ org.apache.velocity.runtime.visitor,
+ org.apache.velocity.servlet,
+ org.apache.velocity.texen,
+ org.apache.velocity.texen.ant,
+ org.apache.velocity.texen.util,
+ org.apache.velocity.util,
+ org.apache.velocity.util.introspection
+Bundle-ClassPath: .,
+ lib/org.apache.velocity_1.7.jar

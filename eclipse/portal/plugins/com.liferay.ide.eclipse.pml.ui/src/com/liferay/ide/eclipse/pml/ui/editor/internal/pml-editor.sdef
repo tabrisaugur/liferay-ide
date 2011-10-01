@@ -10,7 +10,7 @@
 		<page-header-text>Portal Markup Language</page-header-text>
 		<root-node>
 			<node>
-				<label>Portal</label>
+				<label>${Name!=null?Name:'&lt;Company-Name&gt;'}</label>
 				<use-model-element-image></use-model-element-image>
 				<section>
 					<label>${Name !=null?Name:'&lt;portal&gt;'}</label>
@@ -37,6 +37,7 @@
 						</content>
 					</section>
 					<node-include>OrganizationsNodeList</node-include>
+                    <image>icons/elcl16/organizations_16x16.gif</image>
 				</node>
 				<node>
 					<label>Sites</label>
@@ -55,6 +56,7 @@
 						</content>
 					</section>
 					<node-include>SitesNodeList</node-include>
+                    <image>icons/elcl16/sites_16x16.png</image>
 				</node>
 
 			</node>
@@ -120,52 +122,112 @@
 				<content>
 					<include>Page.QuickDetails.Composite</include>
 				</content>
+                <collapsible>true</collapsible>
 			</section>
-			<node-factory>
-				<property>Pages</property>
-				<case>
-					<label>${Name!=null?Name:'&lt;page-name&gt;'}</label>
-					<use-model-element-image></use-model-element-image>
-					<section>
-						<label>Details</label>
-						<content>
-							<include>Page.Details.Composite</include>
-						</content>
-					</section>
-					<section>
-						<content>
-							<include>PageType.PageBook.Composite</include>
-						</content>
-						<label>${Type!=null?concat(Type,'- Page Details'):'&lt;type&gt;-Page Details'}</label>
-					</section>
-					<section>
-						<label>Child Pages Quick Edit</label>
-						<content>
-							<include>Page.QuickDetails.Composite</include>
-						</content>
-					</section>
-					<node-factory>
-						<property>Pages</property>
-						<case>
-							<label>${Name!=null?Name:'&lt;page-name&gt;'}</label>
-							<use-model-element-image></use-model-element-image>
-							<section>
-								<label>Details</label>
-								<content>
-									<include>Page.Details.Composite</include>
-								</content>
-							</section>
-							<section>
+			<section>
+				<label>Sub Organizations or Locations Quick Edit</label>
+				<content>
+					<property-editor>
+						<property>Organizations</property>
+						<child-property>Id</child-property>
+						<child-property>Name</child-property>
+						<child-property>Type</child-property>
+						<hint>
+							<name>show.label</name>
+							<value>false</value>
+						</hint>
+					</property-editor>
+				</content>
+                <collapsible>true</collapsible>
+			</section>
+			<node>
+				<label>Sub-Organizations/Locations</label>
+				<node-factory>
+					<property>Organizations</property>
+					<case>
+						<label>${Name !=null?Name:'&lt;sub-organization or location&gt;'}</label>
+						<use-model-element-image></use-model-element-image>
+						<section>
+							<label>Details</label>
+							<content>
+								<property-editor>Id</property-editor>
+								<property-editor>Name</property-editor>
+								<property-editor>FriendlyUrl</property-editor>
+								<property-editor>Type</property-editor>
+								<switching-panel>
+									<enum-controller>
+										<property>Type</property>
+									</enum-controller>
+									<panel>
+										<key>OrganizationType.LOCATION</key>
+										<content>
+											<property-editor>
+												<property>Country</property>
+												<related-content-width>50</related-content-width>
+												<related-content>
+													<property-editor>Region</property-editor>
+												</related-content>
+											</property-editor>
+										</content>
+									</panel>
+								</switching-panel>
+							</content>
+						</section>
+					</case>
+				</node-factory>
+                <image>icons/elcl16/organizations_16x16.gif</image>
+			</node>
+			<node>
+				<label>Pages</label>
+				<node-factory>
+					<property>Pages</property>
+					<case>
+						<label>${Name!=null?Name:'&lt;page-name&gt;'}</label>
+						<use-model-element-image></use-model-element-image>
+						<section>
+							<label>${Name!=null?concat(Name,'- Page Details'):'Name-Details'}</label>
+							<content>
+								<include>Page.Details.Composite</include>
+							</content>
+						</section>
+						<section>
+							<content>
+								<include>PageType.PageBook.Composite</include>
+							</content>
+							<label>${Type!=null?concat(Type,'- Page Details'):'&lt;type&gt;-Page Details'}</label>
+						</section>
+						<section>
+							<label>Child Pages Quick Edit</label>
+							<content>
+								<include>Page.QuickDetails.Composite</include>
+							</content>
+                            <collapsible>true</collapsible>
+                            <collapsed-initially>true</collapsed-initially>
+						</section>
+						<node-factory>
+							<property>Pages</property>
+							<case>
+								<label>${Name!=null?Name:'&lt;page-name&gt;'}</label>
+								<use-model-element-image></use-model-element-image>
+								<section>
+									<label>Details</label>
+									<content>
+										<include>Page.Details.Composite</include>
+									</content>
+								</section>
+								<section>
 
-								<label>${Type!=null?concat(Type,'- Page Details'):'&lt;type&gt;-Page Details'}</label>
-                                <content>
-                                    <include>PageType.PageBook.Composite</include>
-                                </content>
-							</section>
-						</case>
-					</node-factory>
-				</case>
-			</node-factory>
+									<label>${Type!=null?concat(Type,'- Page Details'):'&lt;type&gt;-Page Details'}</label>
+									<content>
+										<include>PageType.PageBook.Composite</include>
+									</content>
+								</section>
+							</case>
+						</node-factory>
+					</case>
+				</node-factory>
+                <image>icons/elcl16/pages_16x16.gif</image>
+			</node>
 		</case>
 		<property>Organizations</property>
 	</node-factory>
@@ -182,59 +244,61 @@
 			</section>
 			<label>${Name !=null? Name:'&lt;site-name&gt;'}</label>
 			<use-model-element-image></use-model-element-image>
-			<node-factory>
-				<property>Pages</property>
-				<case>
-					<label>${Name!=null?Name:'&lt;page-name&gt;'}</label>
-					<use-model-element-image></use-model-element-image>
-					<section>
-						<label>Details</label>
-						<content>
-							<include>Page.Details.Composite</include>
-						</content>
-					</section>
-					<section>
-						<label>${Type!=null?concat(Type,'- Page Details'):'&lt;type&gt;-Page Details'}</label>
-						<content>
-							<include>PageType.PageBook.Composite</include>
-						</content>
-					</section>
-
-					<section>
-						<label>Child Pages Quick Edit</label>
-						<content>
-							<include>Page.QuickDetails.Composite</include>
-						</content>
-					</section>
-					<node-factory>
-						<property>Pages</property>
-						<case>
-							<label>${Name!=null?Name:'&lt;page-name&gt;'}</label>
-							<use-model-element-image></use-model-element-image>
-							<section>
-								<label>Details</label>
-								<content>
-									<include>Page.Details.Composite</include>
-								</content>
-							</section>
-							<section>
-
-								<label>${Type!=null?concat(Type,'- Page Details'):'&lt;type&gt;-Page Details'}</label>
-                                <content>
-                                    <include>PageType.PageBook.Composite</include>
-                                </content>
-							</section>
-						</case>
-					</node-factory>
-
-				</case>
-			</node-factory>
 			<section>
 				<label>Pages Quick Edit</label>
 				<content>
 					<include>Page.QuickDetails.Composite</include>
 				</content>
 			</section>
+			<node>
+				<label>Pages</label>
+				<node-factory>
+					<property>Pages</property>
+					<case>
+						<label>${Name!=null?Name:'&lt;page-name&gt;'}</label>
+						<use-model-element-image></use-model-element-image>
+						<section>
+							<label>Details</label>
+							<content>
+								<include>Page.Details.Composite</include>
+							</content>
+						</section>
+						<section>
+							<content>
+								<include>PageType.PageBook.Composite</include>
+							</content>
+							<label>${Type!=null?concat(Type,'- Page Details'):'&lt;type&gt;-Page Details'}</label>
+						</section>
+						<section>
+							<label>Child Pages Quick Edit</label>
+							<content>
+								<include>Page.QuickDetails.Composite</include>
+							</content>
+						</section>
+						<node-factory>
+							<property>Pages</property>
+							<case>
+								<label>${Name!=null?Name:'&lt;page-name&gt;'}</label>
+								<use-model-element-image></use-model-element-image>
+								<section>
+									<label>Details</label>
+									<content>
+										<include>Page.Details.Composite</include>
+									</content>
+								</section>
+								<section>
+
+									<label>${Type!=null?concat(Type,'- Page Details'):'&lt;type&gt;-Page Details'}</label>
+									<content>
+										<include>PageType.PageBook.Composite</include>
+									</content>
+								</section>
+							</case>
+						</node-factory>
+
+					</case>
+				</node-factory>
+			</node>
 
 		</case>
 		<property>Sites</property>
@@ -244,15 +308,15 @@
 		<content>
 			<property-editor>Id</property-editor>
 			<property-editor>Name</property-editor>
-            <property-editor>
-                <property>Type</property>
-                <related-content>
-                    <property-editor>Hidden</property-editor>
-                </related-content>
-                <related-content-width>50</related-content-width>
-            </property-editor>
+			<property-editor>
+				<property>Type</property>
+				<related-content>
+					<property-editor>Hidden</property-editor>
+				</related-content>
+				<related-content-width>50</related-content-width>
+			</property-editor>
 			<property-editor>FriendlyUrl</property-editor>
-            <property-editor>Layout</property-editor>
+			<property-editor>Layout</property-editor>
 		</content>
 	</composite>
 	<composite>
@@ -277,18 +341,18 @@
 			<switching-panel>
 				<panel>
 					<key>PageType.PORTLET</key>
-					<content>
-						<with>
-							<path>Portlet</path>
-							<default-panel>
-								<content>
-									<property-editor>Id</property-editor>
-									<property-editor>Name</property-editor>
-									<property-editor>LayoutColumn</property-editor>
-								</content>
-							</default-panel>
-						</with>
-					</content>
+                    <content>
+                        <property-editor>
+                            <property>Portlets</property>
+                            <child-property>Id</child-property>
+                            <child-property>Name</child-property>
+                            <child-property>LayoutColumn</child-property>
+                            <hint>
+                                <name>show.label</name>
+                                <value>false</value>
+                            </hint>
+                        </property-editor>
+                    </content>
 				</panel>
 				<enum-controller>
 					<property>Type</property>
@@ -341,19 +405,19 @@
 						</with>
 					</content>
 				</panel>
-                <panel>
-                    <key>PageType.LINKTOPAGE</key>
-                    <content>
-                        <with>
-                            <path>LinkToPage</path>
-                            <default-panel>
-                                <content>
-                                    <property-editor>Page</property-editor>
-                                </content>
-                            </default-panel>
-                        </with>
-                    </content>
-                </panel>
+				<panel>
+					<key>PageType.LINKTOPAGE</key>
+					<content>
+						<with>
+							<path>LinkToPage</path>
+							<default-panel>
+								<content>
+									<property-editor>Page</property-editor>
+								</content>
+							</default-panel>
+						</with>
+					</content>
+				</panel>
 			</switching-panel>
 		</content>
 

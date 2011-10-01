@@ -17,9 +17,10 @@
 
 package com.liferay.ide.eclipse.pml.core.model.internal;
 
-import java.util.Locale;
 import java.util.SortedSet;
 
+import org.eclipse.sapphire.modeling.IModelElement;
+import org.eclipse.sapphire.modeling.ModelProperty;
 import org.eclipse.sapphire.modeling.PossibleValuesService;
 
 /**
@@ -27,16 +28,33 @@ import org.eclipse.sapphire.modeling.PossibleValuesService;
  */
 public class CountryPossibleValueService extends PossibleValuesService {
 
+	//just some samples TODO: WS Call
+	String[] countries = { "Canada", "China", "France", "Germany", "Hong Kong", "Hungary", "Israel", "Italy", "Japan",
+		"South Korea", "Netherlands", "Portugal", "Russia", "Singapore", "Spain", "Turkey", "United Kingdom",
+		"United States", "India" };
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.sapphire.modeling.ModelPropertyService#init(org.eclipse.sapphire.modeling.IModelElement,
+	 * org.eclipse.sapphire.modeling.ModelProperty, java.lang.String[])
+	 */
+	@Override
+	public void init( IModelElement element, ModelProperty property, String[] params ) {
+		super.init( element, property, params );
+		// TODO initialize the Web Call
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.eclipse.sapphire.modeling.PossibleValuesService#fillPossibleValues(java.util.SortedSet)
 	 */
 	@Override
 	protected void fillPossibleValues( SortedSet<String> values ) {
-		// TODO should be replaced with Liferay WS Call
-		String[] countries = Locale.getISOCountries();
-		for ( String country : countries ) {
-			values.add( country );
+
+		if ( countries != null ) {
+			for ( String country : countries ) {
+				values.add( country );
+			}
 		}
 
 	}

@@ -20,6 +20,8 @@ package com.liferay.ide.eclipse.pml.core.model;
 import com.liferay.ide.eclipse.pml.core.model.internal.CountryPossibleValueService;
 import com.liferay.ide.eclipse.pml.core.model.internal.OraganizationTypeValidationService;
 
+import org.eclipse.sapphire.modeling.ListProperty;
+import org.eclipse.sapphire.modeling.ModelElementList;
 import org.eclipse.sapphire.modeling.ModelElementType;
 import org.eclipse.sapphire.modeling.Value;
 import org.eclipse.sapphire.modeling.ValueProperty;
@@ -32,22 +34,32 @@ import org.eclipse.sapphire.modeling.annotations.Service;
 import org.eclipse.sapphire.modeling.annotations.Type;
 import org.eclipse.sapphire.modeling.annotations.Whitespace;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
+import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
 
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
  */
 @GenerateImpl
-@Image( path = "images/elcl16/organization_16x16.gif" )
+@Image( path = "images/elcl16/organization_16x16.png" )
 public interface IOrganization extends ICommonProperties, IPageContainer {
 
 	ModelElementType TYPE = new ModelElementType( IOrganization.class );
+
+	// *** Organizations ***
+
+	@Type( base = IOrganization.class )
+	@Label( standard = "Organizations" )
+	@XmlListBinding( path = "organizations", mappings = { @XmlListBinding.Mapping( element = "organization", type = IOrganization.class ) } )
+	ListProperty PROP_ORGANIZATIONS = new ListProperty( TYPE, "Organizations" );
+
+	ModelElementList<IOrganization> getOrganizations();
 
 	// *** Type ***
 
 	@Type( base = OrganizationType.class )
 	@Label( standard = "Organization Type" )
-	@DefaultValue( text = "Regular Organization" )
 	@Required
+	@DefaultValue(text="Regular Organization")
 	@XmlBinding( path = "@type" )
 	@Service( impl = OraganizationTypeValidationService.class )
 	ValueProperty PROP_TYPE = new ValueProperty( TYPE, "Type" );

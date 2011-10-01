@@ -18,6 +18,7 @@
 package com.liferay.ide.eclipse.pml.ui.editor;
 
 import com.liferay.ide.eclipse.pml.core.model.IPortal;
+import com.liferay.ide.eclipse.pml.core.model.util.PmlUtil;
 import com.liferay.ide.eclipse.pml.ui.PMLUIPlugin;
 
 import org.eclipse.sapphire.ui.swt.xml.editor.SapphireEditorForXml;
@@ -42,6 +43,12 @@ public class PMLEditor extends SapphireEditorForXml {
 
 		setEditorDefinitionPath( EDITOR_DEFINITION_PATH );
 		setRootModelElementType( IPortal.TYPE );
+		try {
+			PmlUtil.getInstance();
+		}
+		catch ( Exception e ) {
+			//TODO Log it
+		}
 
 	}
 }

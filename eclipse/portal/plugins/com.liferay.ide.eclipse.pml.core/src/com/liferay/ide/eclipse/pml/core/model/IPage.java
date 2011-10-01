@@ -18,8 +18,12 @@
 package com.liferay.ide.eclipse.pml.core.model;
 
 import com.liferay.ide.eclipse.pml.core.model.internal.InvertingBooleanXmlValueBinding;
+import com.liferay.ide.eclipse.pml.core.model.internal.LayoutPossibleValueService;
+import com.liferay.ide.eclipse.pml.core.model.internal.AttributeTextNodeValueBinding;
 
 import org.eclipse.sapphire.modeling.ImpliedElementProperty;
+import org.eclipse.sapphire.modeling.ListProperty;
+import org.eclipse.sapphire.modeling.ModelElementList;
 import org.eclipse.sapphire.modeling.ModelElementType;
 import org.eclipse.sapphire.modeling.Value;
 import org.eclipse.sapphire.modeling.ValueProperty;
@@ -29,10 +33,12 @@ import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Image;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.Required;
+import org.eclipse.sapphire.modeling.annotations.Service;
 import org.eclipse.sapphire.modeling.annotations.Type;
 import org.eclipse.sapphire.modeling.annotations.Whitespace;
 import org.eclipse.sapphire.modeling.xml.annotations.CustomXmlValueBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
+import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
 
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
@@ -69,15 +75,14 @@ public interface IPage extends ICommonProperties, IPageContainer {
 
 	void setFriendlyUrl( String value );
 
-	// *** Portlet ***
+	// *** Portlets ***
 
 	@Type( base = IPortletType.class )
-	@Label( standard = "Portlet" )
-	@XmlBinding( path = "portlet" )
-	@CountConstraint( max = 1, min = 0 )
-	ImpliedElementProperty PROP_PORTLET = new ImpliedElementProperty( TYPE, "Portlet" );
+	@Label( standard = "Portlets" )
+	@XmlListBinding( path = "portlets", mappings = { @XmlListBinding.Mapping( element = "portlet", type = IPortletType.class ) } )
+	ListProperty PROP_PORTLETS = new ListProperty( TYPE, "Portlets" );
 
-	IPortletType getPortlet();
+	ModelElementList<IPortletType> getPortlets();
 
 	// *** WebContent ***
 
@@ -120,7 +125,7 @@ public interface IPage extends ICommonProperties, IPageContainer {
 	@Type( base = Boolean.class )
 	@Label( standard = "Hidden" )
 	@XmlBinding( path = "@hidden" )
-	@CustomXmlValueBinding( impl = InvertingBooleanXmlValueBinding.class,params="@hidden" )
+	@CustomXmlValueBinding( impl = InvertingBooleanXmlValueBinding.class, params = "@hidden" )
 	ValueProperty PROP_HIDDEN = new ValueProperty( TYPE, "Hidden" );
 
 	Value<Boolean> getHidden();
@@ -129,10 +134,12 @@ public interface IPage extends ICommonProperties, IPageContainer {
 
 	void setHidden( Boolean value );
 
-	// *** Layout ***
+	// *** LayoutTemplate ***
 
 	@Label( standard = "Layout" )
 	@Whitespace( trim = true )
+	@Service(impl=LayoutPossibleValueService.class)
+	@CustomXmlValueBinding(impl=AttributeTextNodeValueBinding.class,params={"layout","layout"})
 	ValueProperty PROP_LAYOUT = new ValueProperty( TYPE, "Layout" );
 
 	Value<String> getLayout();
