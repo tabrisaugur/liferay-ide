@@ -43,12 +43,22 @@ public class PMLEditor extends SapphireEditorForXml {
 
 		setEditorDefinitionPath( EDITOR_DEFINITION_PATH );
 		setRootModelElementType( IPortal.TYPE );
-		try {
-			PmlUtil.getInstance();
-		}
-		catch ( Exception e ) {
-			//TODO Log it
-		}
+		Runnable runnable = new Runnable() {
+
+			@Override
+			public void run() {
+				try {
+					PmlUtil.getInstance();
+				}
+				catch ( Exception e ) {
+					// TODO Log it
+				}
+
+			}
+		};
+		runnable.run();
 
 	}
+	
+	
 }
