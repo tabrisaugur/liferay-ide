@@ -24,6 +24,8 @@ public interface ISDKProjectsImportDataModelProperties extends IFacetProjectCrea
 
 	public static final String LIFERAY_SDK_NAME = "ISDKProjectsImportDataModelProperties.LIFERAY_SDK_NAME";
 
+	public static final String[] PLUGIN_BINARIES_EXTENSIONS = { "*.war", "*.jar" };
+
 	public static final String SDK_LOCATION = "ISDKProjectsImportDataModelProperties.SDK_LOCATION";
 
 	public static final String SDK_VERSION = "ISDKProjectsImportDataModelProperties.SDK_VERSION";

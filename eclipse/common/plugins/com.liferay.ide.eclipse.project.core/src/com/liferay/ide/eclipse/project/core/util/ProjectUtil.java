@@ -28,6 +28,7 @@ import com.liferay.ide.eclipse.sdk.util.SDKUtil;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -35,6 +36,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.apache.commons.lang.WordUtils;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -91,6 +93,38 @@ import org.eclipse.wst.common.project.facet.core.runtime.IRuntime;
 public class ProjectUtil {
 
 	public static final String METADATA_FOLDER = ".metadata";
+
+	/**
+	 * This method was added as part of the IDE-381 fix, this method will collect all the binaries based on the binaries
+	 * list
+	 * 
+	 * @return true if the directory has some binaries
+	 */
+	public static boolean collectBinariesFromDirectory(
+		Collection<File> binaryProjectFiles, File directory, boolean recurse, IProgressMonitor monitor ) {
+		if ( monitor.isCanceled() ) {
+			return false;
+		}
+
+		monitor.subTask( NLS.bind( DataTransferMessages.WizardProjectsImportPage_CheckingMessage, directory.getPath() ) );
+
+		FileFilter wildcardFileFilter = new WildcardFileFilter( new String[] { "*.war" } );
+		File[] contents = directory.listFiles( wildcardFileFilter );
+
+		if ( contents == null ) {
+			return false;
+		}
+		else {
+			for ( int i = 0; i < contents.length; i++ ) {
+				File file = contents[i];
+				if ( !binaryProjectFiles.contains( file ) ) {
+					binaryProjectFiles.add( file );
+				}
+			}
+		}
+
+		return true;
+	}
 
 	public static boolean collectProjectsFromDirectory(
 		Collection<File> eclipseProjectFiles, Collection<File> liferayProjectDirs, File directory,
@@ -376,6 +410,69 @@ public class ProjectUtil {
 		}
 
 		return null;
+	}
+
+	private static void fixExtProjectClasspathEntries(IProject project) {
+		try {
+			boolean fixedAttr = false;
+
+			IJavaProject javaProject = JavaCore.create(project);
+
+			List<IClasspathEntry> newEntries = new ArrayList<IClasspathEntry>();
+
+			IClasspathEntry[] entries = javaProject.getRawClasspath();
+
+			for (IClasspathEntry entry : entries) {
+				IClasspathEntry newEntry = null;
+
+				if (entry.getEntryKind() == IClasspathEntry.CPE_SOURCE) {
+					List<IClasspathAttribute> newAttrs = new ArrayList<IClasspathAttribute>();
+
+					IClasspathAttribute[] attrs = entry.getExtraAttributes();
+
+					if (!CoreUtil.isNullOrEmpty(attrs)) {
+						for (IClasspathAttribute attr : attrs) {
+							IClasspathAttribute newAttr = null;
+
+							if ("owner.project.facets".equals(attr.getName()) &&
+								"liferay.plugin".equals(attr.getValue())) {
+								newAttr = JavaCore.newClasspathAttribute(attr.getName(), "liferay.ext");
+								fixedAttr = true;
+							}
+							else {
+								newAttr = attr;
+							}
+
+							newAttrs.add(newAttr);
+						}
+
+						newEntry =
+							JavaCore.newSourceEntry(
+								entry.getPath(), entry.getInclusionPatterns(), entry.getExclusionPatterns(),
+								entry.getOutputLocation(), newAttrs.toArray(new IClasspathAttribute[0]));
+					}
+				}
+
+				if (newEntry == null) {
+					newEntry = entry;
+				}
+
+				newEntries.add(newEntry);
+			}
+
+			if (fixedAttr) {
+				IProgressMonitor monitor = new NullProgressMonitor();
+
+				javaProject.setRawClasspath(newEntries.toArray(new IClasspathEntry[0]), monitor);
+
+				javaProject.getProject().refreshLocal(IResource.DEPTH_INFINITE, monitor);
+			}
+
+			fixExtProjectSrcFolderLinks(project);
+		}
+		catch (Exception ex) {
+			ProjectCorePlugin.logError("Exception trying to fix Ext project classpath entries.", ex);
+		}
 	}
 
 	/** IDE-270 */
@@ -833,69 +930,6 @@ public class ProjectUtil {
 
 		if (ddModel != null) {
 			ddModel.setBooleanProperty(IJ2EEFacetInstallDataModelProperties.GENERATE_DD, generateDD);
-		}
-	}
-
-	private static void fixExtProjectClasspathEntries(IProject project) {
-		try {
-			boolean fixedAttr = false;
-
-			IJavaProject javaProject = JavaCore.create(project);
-
-			List<IClasspathEntry> newEntries = new ArrayList<IClasspathEntry>();
-
-			IClasspathEntry[] entries = javaProject.getRawClasspath();
-
-			for (IClasspathEntry entry : entries) {
-				IClasspathEntry newEntry = null;
-
-				if (entry.getEntryKind() == IClasspathEntry.CPE_SOURCE) {
-					List<IClasspathAttribute> newAttrs = new ArrayList<IClasspathAttribute>();
-
-					IClasspathAttribute[] attrs = entry.getExtraAttributes();
-
-					if (!CoreUtil.isNullOrEmpty(attrs)) {
-						for (IClasspathAttribute attr : attrs) {
-							IClasspathAttribute newAttr = null;
-
-							if ("owner.project.facets".equals(attr.getName()) &&
-								"liferay.plugin".equals(attr.getValue())) {
-								newAttr = JavaCore.newClasspathAttribute(attr.getName(), "liferay.ext");
-								fixedAttr = true;
-							}
-							else {
-								newAttr = attr;
-							}
-
-							newAttrs.add(newAttr);
-						}
-
-						newEntry =
-							JavaCore.newSourceEntry(
-								entry.getPath(), entry.getInclusionPatterns(), entry.getExclusionPatterns(),
-								entry.getOutputLocation(), newAttrs.toArray(new IClasspathAttribute[0]));
-					}
-				}
-
-				if (newEntry == null) {
-					newEntry = entry;
-				}
-
-				newEntries.add(newEntry);
-			}
-
-			if (fixedAttr) {
-				IProgressMonitor monitor = new NullProgressMonitor();
-
-				javaProject.setRawClasspath(newEntries.toArray(new IClasspathEntry[0]), monitor);
-
-				javaProject.getProject().refreshLocal(IResource.DEPTH_INFINITE, monitor);
-			}
-
-			fixExtProjectSrcFolderLinks(project);
-		}
-		catch (Exception ex) {
-			ProjectCorePlugin.logError("Exception trying to fix Ext project classpath entries.", ex);
 		}
 	}
 
