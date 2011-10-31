@@ -33,9 +33,9 @@ import com.liferay.ide.eclipse.sdk.SDKManager;
 /**
  * @author <a href="mailto:kamesh.sampath@hotmail.com">Kamesh Sampath</a>
  */
-public class PluginBinaryProjectsImportOperation extends SDKProjectsImportOperation {
+public class BinaryProjectsImportOperation extends SDKProjectsImportOperation {
 
-	public PluginBinaryProjectsImportOperation( IDataModel model ) {
+	public BinaryProjectsImportOperation( IDataModel model ) {
 		super( model );
 
 	}
@@ -60,7 +60,7 @@ public class PluginBinaryProjectsImportOperation extends SDKProjectsImportOperat
 			ProjectRecord[] projectRecords = new ProjectRecord[seleBinaryRecords.length];
 			int i = 0;
 			for ( Object object : seleBinaryRecords ) {
-				PluginBinaryRecord pluginBinaryRecord = (PluginBinaryRecord) object;
+				BinaryProjectRecord pluginBinaryRecord = (BinaryProjectRecord) object;
 				// TODO: Verify the version and alert the user
 				try {
 					projectRecords[i++] =

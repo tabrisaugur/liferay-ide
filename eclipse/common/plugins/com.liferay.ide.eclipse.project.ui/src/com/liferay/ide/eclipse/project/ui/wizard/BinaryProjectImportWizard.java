@@ -15,7 +15,7 @@
 
 package com.liferay.ide.eclipse.project.ui.wizard;
 
-import com.liferay.ide.eclipse.project.core.PluginBinariesImportDataModelProvider;
+import com.liferay.ide.eclipse.project.core.BinaryProjectImportDataModelProvider;
 import com.liferay.ide.eclipse.project.core.SDKProjectsImportDataModelProvider;
 import com.liferay.ide.eclipse.project.ui.ProjectUIPlugin;
 import com.liferay.ide.eclipse.sdk.SDK;
@@ -31,26 +31,26 @@ import org.eclipse.wst.common.frameworks.internal.datamodel.ui.DataModelWizard;
  * @author <a href="mailto:kamesh.sampath@hotmail.com">Kamesh Sampath</a>
  */
 @SuppressWarnings( "restriction" )
-public class PluginBinaryProjectsImportWizard extends DataModelWizard implements IWorkbenchWizard {
+public class BinaryProjectImportWizard extends DataModelWizard implements IWorkbenchWizard {
 
-	protected PluginBinaryProjectsImportWizardPage pluginBinaryProjectsImportWizardPage;
+	protected BinaryProjectImportWizardPage pluginBinaryProjectImportWizardPage;
 
 	protected SDK sdk;
 
-	public PluginBinaryProjectsImportWizard() {
+	public BinaryProjectImportWizard() {
 		this( (IDataModel) null );
 	}
 
-	public PluginBinaryProjectsImportWizard( IDataModel dataModel ) {
+	public BinaryProjectImportWizard( IDataModel dataModel ) {
 		super( dataModel );
 
-		setWindowTitle( "Import Projects" );
+		setWindowTitle( "Import Project" );
 
 		setDefaultPageImageDescriptor( ProjectUIPlugin.imageDescriptorFromPlugin(
 			ProjectUIPlugin.PLUGIN_ID, "/icons/wizban/import_wiz.png" ) );
 	}
 
-	public PluginBinaryProjectsImportWizard( SDK sdk ) {
+	public BinaryProjectImportWizard( SDK sdk ) {
 		this( (IDataModel) null );
 
 		this.sdk = sdk;
@@ -71,14 +71,14 @@ public class PluginBinaryProjectsImportWizard extends DataModelWizard implements
 			model.setStringProperty( SDKProjectsImportDataModelProvider.LIFERAY_SDK_NAME, sdk.getName() );
 		}
 
-		pluginBinaryProjectsImportWizardPage = new PluginBinaryProjectsImportWizardPage( getDataModel(), "pageOne" );
+		pluginBinaryProjectImportWizardPage = new BinaryProjectImportWizardPage( getDataModel(), "pageOne" );
 
-		addPage( pluginBinaryProjectsImportWizardPage );
+		addPage( pluginBinaryProjectImportWizardPage );
 	}
 
 	@Override
 	protected IDataModelProvider getDefaultProvider() {
-		return new PluginBinariesImportDataModelProvider();
+		return new BinaryProjectImportDataModelProvider();
 	}
 
 	@Override

@@ -18,7 +18,7 @@
 package com.liferay.ide.eclipse.project.core.util;
 
 import com.liferay.ide.eclipse.core.util.ZipUtil;
-import com.liferay.ide.eclipse.project.core.PluginBinaryRecord;
+import com.liferay.ide.eclipse.project.core.BinaryProjectRecord;
 import com.liferay.ide.eclipse.project.core.ProjectRecord;
 import com.liferay.ide.eclipse.project.core.facet.IPluginFacetConstants;
 import com.liferay.ide.eclipse.sdk.ISDKConstants;
@@ -50,7 +50,7 @@ public class ProjectImportUtil {
 	 * @throws IOException
 	 */
 	public static ProjectRecord createPluginProject(
-		IDataModel dataModel, PluginBinaryRecord pluginBinaryRecord, SDK liferaySDK ) throws IOException {
+		IDataModel dataModel, BinaryProjectRecord pluginBinaryRecord, SDK liferaySDK ) throws IOException {
 		ProjectRecord projectRecord = null;
 		if ( !pluginBinaryRecord.isConflicts() ) {
 			String displayName = pluginBinaryRecord.getDisplayName();

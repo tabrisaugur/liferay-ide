@@ -22,7 +22,7 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModelOperation;
 /**
  * @author <a href="mailto:kamesh.sampath@hotmail.com">Kamesh Sampath</a>
  */
-public class PluginBinariesImportDataModelProvider extends SDKProjectsImportDataModelProvider {
+public class BinaryProjectsImportDataModelProvider extends SDKProjectsImportDataModelProvider {
 
 	/*
 	 * (non-Javadoc)
@@ -30,7 +30,7 @@ public class PluginBinariesImportDataModelProvider extends SDKProjectsImportData
 	 */
 	@Override
 	public IDataModelOperation getDefaultOperation() {
-		return new PluginBinaryProjectsImportOperation( this.model );
+		return new BinaryProjectsImportOperation( this.model );
 	}
 
 }

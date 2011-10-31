@@ -17,7 +17,7 @@ package com.liferay.ide.eclipse.project.ui.wizard;
 
 import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.project.core.ISDKProjectsImportDataModelProperties;
-import com.liferay.ide.eclipse.project.core.PluginBinaryRecord;
+import com.liferay.ide.eclipse.project.core.BinaryProjectRecord;
 import com.liferay.ide.eclipse.ui.util.SWTUtil;
 
 import java.io.File;
@@ -46,7 +46,7 @@ import org.eclipse.wst.web.ui.internal.wizards.DataModelFacetCreationWizardPage;
  * @author <a href="mailto:kamesh.sampath@hotmail.com">Kamesh Sampath</a>
  */
 @SuppressWarnings( { "restriction" } )
-public class PluginBinaryProjectImportWizardPage extends DataModelFacetCreationWizardPage
+public class BinaryProjectImportWizardPage extends DataModelFacetCreationWizardPage
 	implements ISDKProjectsImportDataModelProperties {
 
 	protected long lastModified;
@@ -57,7 +57,7 @@ public class PluginBinaryProjectImportWizardPage extends DataModelFacetCreationW
 
 	protected Text sdkVersion;
 
-	protected PluginBinaryRecord selectedBinary;
+	protected BinaryProjectRecord selectedBinary;
 
 	protected Combo serverTargetCombo;
 
@@ -65,7 +65,7 @@ public class PluginBinaryProjectImportWizardPage extends DataModelFacetCreationW
 
 	protected Text binariesLocation;
 
-	public PluginBinaryProjectImportWizardPage( IDataModel model, String pageName ) {
+	public BinaryProjectImportWizardPage( IDataModel model, String pageName ) {
 		super( model, pageName );
 
 		setTitle( "Import from Liferay Project binary" );
@@ -77,7 +77,7 @@ public class PluginBinaryProjectImportWizardPage extends DataModelFacetCreationW
 
 			@Override
 			public void widgetSelected( SelectionEvent e ) {
-				PluginBinaryProjectImportWizardPage.this.synchHelper.synchAllUIWithModel();
+				BinaryProjectImportWizardPage.this.synchHelper.synchAllUIWithModel();
 				validatePage( true );
 			}
 
@@ -130,7 +130,7 @@ public class PluginBinaryProjectImportWizardPage extends DataModelFacetCreationW
 
 		if ( !CoreUtil.isNullOrEmpty( binaryfile ) ) {
 			binariesLocation.setText( binaryfile );
-			selectedBinary = new PluginBinaryRecord( new File( binaryfile ) );
+			selectedBinary = new BinaryProjectRecord( new File( binaryfile ) );
 			getDataModel().setProperty( SELECTED_PROJECTS, new Object[] { selectedBinary } );
 		}
 	}

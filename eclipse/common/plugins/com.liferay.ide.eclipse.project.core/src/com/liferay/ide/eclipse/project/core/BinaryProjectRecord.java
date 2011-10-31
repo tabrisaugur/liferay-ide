@@ -27,7 +27,7 @@ import java.io.File;
 /**
  * @author <a href="mailto:kamesh.sampath@hotmail.com">Kamesh Sampath</a>
  */
-public class PluginBinaryRecord {
+public class BinaryProjectRecord {
 
 	private String binaryName;
 	private File binaryFile;
@@ -40,7 +40,7 @@ public class PluginBinaryRecord {
 	boolean isPortlet;
 	boolean isLayoutTpl;
 
-	public PluginBinaryRecord( File binaryFile ) {
+	public BinaryProjectRecord( File binaryFile ) {
 		this.binaryFile = binaryFile;
 		setNames();
 	}
