@@ -19,6 +19,8 @@ package com.liferay.ide.eclipse.project.core.util;
 
 import com.liferay.ide.eclipse.core.util.ZipUtil;
 import com.liferay.ide.eclipse.project.core.BinaryProjectRecord;
+import com.liferay.ide.eclipse.project.core.IPortletFramework;
+import com.liferay.ide.eclipse.project.core.ProjectCorePlugin;
 import com.liferay.ide.eclipse.project.core.ProjectRecord;
 import com.liferay.ide.eclipse.project.core.facet.IPluginFacetConstants;
 import com.liferay.ide.eclipse.sdk.ISDKConstants;
@@ -67,12 +69,21 @@ public class ProjectImportUtil {
 			// Create Project
 			if ( pluginBinaryRecord.isHook() ) {
 				projectPath = liferaySDK.createNewHookProject( displayName, displayName );
+	
 				sdkPluginProjectFolder = sdkPluginProjectFolder.append( ISDKConstants.HOOK_PLUGIN_PROJECT_FOLDER );
 				docrootFolder = IPluginFacetConstants.HOOK_PLUGIN_SDK_CONFIG_FOLDER;
 			}
 			else if ( pluginBinaryRecord.isPortlet() ) {
-
-				projectPath = liferaySDK.createNewPortletProject( displayName, displayName, appServerProperties );
+				IPortletFramework[] portletFrameworks = ProjectCorePlugin.getPortletFrameworks();
+				String portletFrameworkName = null;
+				for ( int i = 0; i < portletFrameworks.length; i++ ) {
+					IPortletFramework portletFramework = portletFrameworks[i];
+					if(portletFramework.isDefault()){
+						portletFrameworkName = portletFramework.getShortName();
+						break;
+					}
+				}
+				projectPath = liferaySDK.createNewPortletProject( displayName, displayName,portletFrameworkName, appServerProperties );
 				sdkPluginProjectFolder = sdkPluginProjectFolder.append( ISDKConstants.PORTLET_PLUGIN_PROJECT_FOLDER );
 				docrootFolder = IPluginFacetConstants.PORTLET_PLUGIN_SDK_CONFIG_FOLDER;
 			}

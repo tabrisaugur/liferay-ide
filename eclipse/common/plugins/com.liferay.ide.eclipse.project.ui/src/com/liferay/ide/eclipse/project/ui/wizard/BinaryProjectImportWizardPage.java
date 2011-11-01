@@ -16,8 +16,8 @@
 package com.liferay.ide.eclipse.project.ui.wizard;
 
 import com.liferay.ide.eclipse.core.util.CoreUtil;
-import com.liferay.ide.eclipse.project.core.ISDKProjectsImportDataModelProperties;
 import com.liferay.ide.eclipse.project.core.BinaryProjectRecord;
+import com.liferay.ide.eclipse.project.core.ISDKProjectsImportDataModelProperties;
 import com.liferay.ide.eclipse.ui.util.SWTUtil;
 
 import java.io.File;
@@ -68,8 +68,8 @@ public class BinaryProjectImportWizardPage extends DataModelFacetCreationWizardP
 	public BinaryProjectImportWizardPage( IDataModel model, String pageName ) {
 		super( model, pageName );
 
-		setTitle( "Import from Liferay Project binary" );
-		setDescription( "Select a Liferay Plugin SDK and import existing binary in to it." );
+		setTitle( "Import a Liferay Binary Plugin" );
+		setDescription( "Select a binary plugin (war)to import as new Liferay Plugin Project" );
 	}
 
 	protected void createPluginsSDKField( Composite parent ) {
@@ -83,13 +83,14 @@ public class BinaryProjectImportWizardPage extends DataModelFacetCreationWizardP
 
 		};
 
-		new LiferaySDKField( parent, getDataModel(), selectionAdapter, LIFERAY_SDK_NAME, this.synchHelper );
+		new LiferaySDKField(
+			parent, getDataModel(), selectionAdapter, LIFERAY_SDK_NAME, this.synchHelper, "Import into SDK:" );
 	}
 
 	protected void createBinaryLocationField( Composite parent ) {
 
 		Label label = new Label( parent, SWT.NONE );
-		label.setText( "Import from:" );
+		label.setText( "Binary plugin file (war)" );
 		label.setLayoutData( new GridData( GridData.HORIZONTAL_ALIGN_BEGINNING ) );
 
 		binariesLocation = SWTUtil.createSingleText( parent, 1 );
@@ -217,14 +218,14 @@ public class BinaryProjectImportWizardPage extends DataModelFacetCreationWizardP
 		topComposite.setLayout( gl );
 		topComposite.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true, false, 3, 1 ) );
 
+		createBinaryLocationField( topComposite );
+
 		createPluginsSDKField( topComposite );
 
 		SWTUtil.createVerticalSpacer( topComposite, 1, 3 );
 
 		createSDKLocationField( topComposite );
 		createSDKVersionField( topComposite );
-
-		createBinaryLocationField( topComposite );
 
 		SWTUtil.createVerticalSpacer( topComposite, 1, 3 );
 

@@ -17,6 +17,7 @@
 
 package com.liferay.ide.eclipse.project.core;
 
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModelOperation;
 
 /**
@@ -31,6 +32,16 @@ public class BinaryProjectsImportDataModelProvider extends SDKProjectsImportData
 	@Override
 	public IDataModelOperation getDefaultOperation() {
 		return new BinaryProjectsImportOperation( this.model );
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.liferay.ide.eclipse.project.core.SDKProjectsImportDataModelProvider#createProjectErrorStatus()
+	 */
+	@Override
+	public IStatus createSelectedProjectsErrorStatus() {
+		return ProjectCorePlugin.createErrorStatus( "Must select alteast one binary to import." );
+
 	}
 
 }

@@ -16,8 +16,8 @@
 package com.liferay.ide.eclipse.project.ui.wizard;
 
 import com.liferay.ide.eclipse.core.util.CoreUtil;
-import com.liferay.ide.eclipse.project.core.ISDKProjectsImportDataModelProperties;
 import com.liferay.ide.eclipse.project.core.BinaryProjectRecord;
+import com.liferay.ide.eclipse.project.core.ISDKProjectsImportDataModelProperties;
 import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 import com.liferay.ide.eclipse.project.ui.ProjectUIPlugin;
 import com.liferay.ide.eclipse.ui.util.SWTUtil;
@@ -59,6 +59,7 @@ import org.eclipse.wst.common.frameworks.datamodel.DataModelPropertyDescriptor;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.server.ui.ServerUIUtil;
 import org.eclipse.wst.web.ui.internal.wizards.DataModelFacetCreationWizardPage;
+
 /**
  * @author <a href="mailto:kamesh.sampath@hotmail.com">Kamesh Sampath</a>
  */
@@ -108,8 +109,8 @@ public class BinaryProjectsImportWizardPage extends DataModelFacetCreationWizard
 	public BinaryProjectsImportWizardPage( IDataModel model, String pageName ) {
 		super( model, pageName );
 
-		setTitle( "Import from Liferay Project binary" );
-		setDescription( "Select a Liferay Plugin SDK and import existing binary in to it." );
+		setTitle( "Import Liferay Binary Plugins" );
+		setDescription( "Select binary plugins (wars) to import as new Liferay Plugin Project" );
 	}
 
 	public BinaryProjectRecord[] getPluginBinaryRecords() {
@@ -245,13 +246,14 @@ public class BinaryProjectsImportWizardPage extends DataModelFacetCreationWizard
 
 		};
 
-		new LiferaySDKField( parent, getDataModel(), selectionAdapter, LIFERAY_SDK_NAME, this.synchHelper );
+		new LiferaySDKField(
+			parent, getDataModel(), selectionAdapter, LIFERAY_SDK_NAME, this.synchHelper, "Import into SDK:" );
 	}
 
 	protected void createBinaryLocationField( Composite parent ) {
 
 		Label label = new Label( parent, SWT.NONE );
-		label.setText( "Import from:" );
+		label.setText( "Select root directory:" );
 		label.setLayoutData( new GridData( GridData.HORIZONTAL_ALIGN_BEGINNING ) );
 
 		binariesLocation = SWTUtil.createSingleText( parent, 1 );
@@ -277,10 +279,10 @@ public class BinaryProjectsImportWizardPage extends DataModelFacetCreationWizard
 		String filterPath = binariesLocation.getText();
 		if ( filterPath != null ) {
 			dd.setFilterPath( filterPath );
-			dd.setText( "Select Liferay Plugin binaries folder" + " - " + filterPath ); //$NON-NLS-1$
+			dd.setText( "Select root directory " + " - " + filterPath ); //$NON-NLS-1$
 		}
 		else {
-			dd.setText( "Select Liferay Plugin binaries folder" );
+			dd.setText( "Select root directory" );
 		}
 
 		if ( CoreUtil.isNullOrEmpty( binariesLocation.getText() ) ) {
@@ -299,7 +301,7 @@ public class BinaryProjectsImportWizardPage extends DataModelFacetCreationWizard
 	protected void createProjectsList( Composite workArea ) {
 
 		Label title = new Label( workArea, SWT.NONE );
-		title.setText( "Binaries to import:" );
+		title.setText( "Binary plugins:" );
 		title.setLayoutData( new GridData( SWT.LEFT, SWT.CENTER, false, false, 3, 1 ) );
 
 		binaryList = new CheckboxTreeViewer( workArea, SWT.BORDER );
