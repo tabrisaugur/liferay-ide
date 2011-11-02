@@ -170,5 +170,9 @@ public interface ISDKConstants {
 	public static final String THEME_PLUGIN_PROJECT_FOLDER = "themes";
 
 	public static final String THEME_PLUGIN_PROJECT_SUFFIX = "-theme";
+	
+	public static final String[] PLUGIN_BINARIES_EXTENSIONS = { "*.war" };
+	
+	public static final String[] PLUGIN_BINARIES_FILTERS = { "war"};
 
 }

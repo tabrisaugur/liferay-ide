@@ -32,7 +32,7 @@ public class BinaryProjectRecord {
 	private String binaryName;
 	private File binaryFile;
 	private String displayName;
-	private String label;
+	private String filePath;
 	private String liferayVersion;
 	boolean conflicts;
 	boolean isHook;
@@ -47,8 +47,8 @@ public class BinaryProjectRecord {
 
 	private void setNames() {
 		if ( binaryFile != null ) {
-			label = binaryFile.getAbsolutePath();
 			binaryName = binaryFile.getName();
+			filePath = binaryFile.getAbsolutePath();
 			setPluginProperties();
 		}
 
@@ -85,18 +85,18 @@ public class BinaryProjectRecord {
 	}
 
 	/**
-	 * @return the label
+	 * @return the filePath
 	 */
-	public String getLabel() {
-		return label;
+	public String getFilePath() {
+		return filePath;
 	}
 
 	/**
-	 * @param label
-	 *            the label to set
+	 * @param filePath
+	 *            the filePath to set
 	 */
-	public void setLabel( String label ) {
-		this.label = label;
+	public void setFilePath( String label ) {
+		this.filePath = label;
 	}
 
 	/**

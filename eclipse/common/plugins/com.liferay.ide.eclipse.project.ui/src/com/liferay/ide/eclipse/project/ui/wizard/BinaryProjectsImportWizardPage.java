@@ -33,18 +33,24 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.layout.PixelConverter;
 import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.jface.preference.JFacePreferences;
+import org.eclipse.jface.resource.ColorRegistry;
+import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
 import org.eclipse.jface.viewers.ICheckStateListener;
-import org.eclipse.jface.viewers.IColorProvider;
 import org.eclipse.jface.viewers.ITreeContentProvider;
-import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.StyledCellLabelProvider;
+import org.eclipse.jface.viewers.StyledString;
+import org.eclipse.jface.viewers.StyledString.Styler;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -67,25 +73,56 @@ import org.eclipse.wst.web.ui.internal.wizards.DataModelFacetCreationWizardPage;
 public class BinaryProjectsImportWizardPage extends DataModelFacetCreationWizardPage
 	implements ISDKProjectsImportDataModelProperties {
 
-	protected final class BinaryLabelProvider extends LabelProvider implements IColorProvider {
+	protected final class BinaryLabelProvider extends StyledCellLabelProvider {
 
-		public Color getBackground( Object element ) {
-			return null;
+		private static final String ALREADY_EXIST_ELEMENT_COLOR = "already_exist_element_color";
+		private final ColorRegistry COLOR_REGISTRY = JFaceResources.getColorRegistry();
+		private final Styler DISABLED_STYLER;
+
+		public BinaryLabelProvider() {
+			COLOR_REGISTRY.put( ALREADY_EXIST_ELEMENT_COLOR, new RGB( 128, 128, 128 ) );
+			DISABLED_STYLER = StyledString.createColorRegistryStyler( ALREADY_EXIST_ELEMENT_COLOR, null );
 		}
 
+		/*
+		 * (non-Javadoc)
+		 * @see org.eclipse.jface.viewers.StyledCellLabelProvider#update(org.eclipse.jface.viewers.ViewerCell)
+		 */
 		@Override
-		public String getText( Object element ) {
-			return ( (BinaryProjectRecord) element ).getLabel();
-		}
+		public void update( ViewerCell cell ) {
+			Object obj = cell.getElement();
 
-		public Color getForeground( Object element ) {
-			BinaryProjectRecord pluginBinaryRecord = (BinaryProjectRecord) element;
-
-			if ( pluginBinaryRecord.isConflicts() ) {
-				return getShell().getDisplay().getSystemColor( SWT.COLOR_GRAY );
+			BinaryProjectRecord binaryProjectRecord = null;
+			if ( obj instanceof BinaryProjectRecord ) {
+				binaryProjectRecord = (BinaryProjectRecord) obj;
 			}
-			return null;
+			StyledString styledString = null;
+			if ( binaryProjectRecord.isConflicts() ) {
+				// TODO:show warning that some project exists, similar to what we get when importing projects with
+				// standard import existing project into workspace
+				styledString = new StyledString( binaryProjectRecord.getBinaryName(), DISABLED_STYLER );
+				styledString.append( "(" + binaryProjectRecord.getFilePath() + ")", DISABLED_STYLER );
+			}
+			else {
+				styledString =
+					new StyledString( binaryProjectRecord.getBinaryName(), StyledString.createColorRegistryStyler(
+						JFacePreferences.CONTENT_ASSIST_FOREGROUND_COLOR,
+						JFacePreferences.CONTENT_ASSIST_BACKGROUND_COLOR ) );
+				styledString.append( "(" + binaryProjectRecord.getFilePath() + ")", StyledString.COUNTER_STYLER );
+			}
+
+			cell.setImage( getImage() );
+			cell.setText( styledString.getString() );
+			cell.setStyleRanges( styledString.getStyleRanges() );
+			super.update( cell );
 		}
+
+		public Image getImage() {
+			Image image = ProjectUIPlugin.getDefault().getImageRegistry().get( ProjectUIPlugin.IMAGE_ID );
+
+			return image;
+		}
+
 	}
 
 	protected long lastModified;
@@ -110,7 +147,7 @@ public class BinaryProjectsImportWizardPage extends DataModelFacetCreationWizard
 		super( model, pageName );
 
 		setTitle( "Import Liferay Binary Plugins" );
-		setDescription( "Select binary plugins (wars) to import as new Liferay Plugin Project" );
+		setDescription( "Select binary plugins (wars) to import as new Liferay Plugin Projects" );
 	}
 
 	public BinaryProjectRecord[] getPluginBinaryRecords() {
@@ -126,7 +163,14 @@ public class BinaryProjectsImportWizardPage extends DataModelFacetCreationWizard
 		return binaryProjectRecords.toArray( new BinaryProjectRecord[binaryProjectRecords.size()] );
 	}
 
-	public void updateBinariesList( final String path ) {
+	public void updateBinariesList() {
+		String path = binariesLocation.getText();
+		if ( path != null ) {
+			updateBinariesList( path );
+		}
+	}
+
+	public void updateBinariesList( String path ) {
 		// on an empty path empty selectedProjects
 		if ( path == null || path.length() == 0 ) {
 			setMessage( "" ); //$NON-NLS-1$
@@ -142,6 +186,12 @@ public class BinaryProjectsImportWizardPage extends DataModelFacetCreationWizard
 			lastPath = path;
 
 			return;
+		}
+
+		// Check if the direcotry is the Plugins SDK folder
+		String sdkLocationPath = sdkLocation.getText();
+		if ( sdkLocationPath != null && sdkLocationPath.equals( path ) ) {
+			path = sdkLocationPath + "/dist";
 		}
 
 		final File directory = new File( path );
@@ -179,6 +229,7 @@ public class BinaryProjectsImportWizardPage extends DataModelFacetCreationWizard
 					monitor.worked( 10 );
 
 					if ( dirSelected && directory.isDirectory() ) {
+
 						if ( !ProjectUtil.collectBinariesFromDirectory( projectBinaries, directory, true, monitor ) ) {
 							return;
 						}
@@ -242,18 +293,19 @@ public class BinaryProjectsImportWizardPage extends DataModelFacetCreationWizard
 			public void widgetSelected( SelectionEvent e ) {
 				BinaryProjectsImportWizardPage.this.synchHelper.synchAllUIWithModel();
 				validatePage( true );
+				updateBinariesList();
 			}
 
 		};
 
 		new LiferaySDKField(
-			parent, getDataModel(), selectionAdapter, LIFERAY_SDK_NAME, this.synchHelper, "Import into SDK:" );
+			parent, getDataModel(), selectionAdapter, LIFERAY_SDK_NAME, this.synchHelper, "Select SDK to copy into:" );
 	}
 
 	protected void createBinaryLocationField( Composite parent ) {
 
 		Label label = new Label( parent, SWT.NONE );
-		label.setText( "Select root directory:" );
+		label.setText( "Select plugins root directory:" );
 		label.setLayoutData( new GridData( GridData.HORIZONTAL_ALIGN_BEGINNING ) );
 
 		binariesLocation = SWTUtil.createSingleText( parent, 1 );
@@ -522,16 +574,16 @@ public class BinaryProjectsImportWizardPage extends DataModelFacetCreationWizard
 		topComposite.setLayout( gl );
 		topComposite.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true, false, 3, 1 ) );
 
+		createBinaryLocationField( topComposite );
+
+		SWTUtil.createVerticalSpacer( topComposite, 1, 3 );
+
 		createPluginsSDKField( topComposite );
 
 		SWTUtil.createSeparator( topComposite, 3 );
 
 		createSDKLocationField( topComposite );
 		createSDKVersionField( topComposite );
-
-		SWTUtil.createVerticalSpacer( topComposite, 1, 3 );
-
-		createBinaryLocationField( topComposite );
 
 		SWTUtil.createVerticalSpacer( topComposite, 1, 3 );
 

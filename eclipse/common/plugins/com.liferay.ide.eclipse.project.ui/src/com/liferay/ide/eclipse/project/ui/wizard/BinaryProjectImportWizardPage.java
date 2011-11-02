@@ -18,6 +18,7 @@ package com.liferay.ide.eclipse.project.ui.wizard;
 import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.project.core.BinaryProjectRecord;
 import com.liferay.ide.eclipse.project.core.ISDKProjectsImportDataModelProperties;
+import com.liferay.ide.eclipse.sdk.ISDKConstants;
 import com.liferay.ide.eclipse.ui.util.SWTUtil;
 
 import java.io.File;
@@ -84,7 +85,7 @@ public class BinaryProjectImportWizardPage extends DataModelFacetCreationWizardP
 		};
 
 		new LiferaySDKField(
-			parent, getDataModel(), selectionAdapter, LIFERAY_SDK_NAME, this.synchHelper, "Import into SDK:" );
+			parent, getDataModel(), selectionAdapter, LIFERAY_SDK_NAME, this.synchHelper, "Select SDK to copy into:" );
 	}
 
 	protected void createBinaryLocationField( Composite parent ) {
@@ -112,7 +113,7 @@ public class BinaryProjectImportWizardPage extends DataModelFacetCreationWizardP
 	 */
 	protected void doBrowse() {
 		FileDialog fd = new FileDialog( this.getShell(), SWT.OPEN );
-		fd.setFilterExtensions( PLUGIN_BINARIES_EXTENSIONS );
+		fd.setFilterExtensions( ISDKConstants.PLUGIN_BINARIES_EXTENSIONS );
 
 		String filterPath = binariesLocation.getText();
 		if ( filterPath != null ) {
