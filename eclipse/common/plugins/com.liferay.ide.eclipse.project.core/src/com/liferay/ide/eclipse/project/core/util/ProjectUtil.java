@@ -35,7 +35,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.WordUtils;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -92,39 +91,7 @@ import org.eclipse.wst.common.project.facet.core.runtime.IRuntime;
 public class ProjectUtil {
 
 	public static final String METADATA_FOLDER = ".metadata";
-
-	/**
-	 * This method was added as part of the IDE-381 fix, this method will collect all the binaries based on the binaries
-	 * list
-	 * 
-	 * @return true if the directory has some binaries
-	 */
-	public static boolean collectBinariesFromDirectory(
-		Collection<File> binaryProjectFiles, File directory, boolean recurse, IProgressMonitor monitor ) {
-		if ( monitor.isCanceled() ) {
-			return false;
-		}
-
-		monitor.subTask( NLS.bind( DataTransferMessages.WizardProjectsImportPage_CheckingMessage, directory.getPath() ) );
-
 	
-		Collection<File> contents = FileUtils.listFiles( directory, ISDKConstants.PLUGIN_BINARIES_FILTERS, true );
-
-		if ( contents == null ) {
-			return false;
-		}
-		else {
-
-			for ( File file : contents ) {
-				if ( !binaryProjectFiles.contains( file ) ) {
-					binaryProjectFiles.add( file );
-				}
-			}
-		}
-
-		return true;
-	}
-
 	public static boolean collectProjectsFromDirectory(
 		Collection<File> eclipseProjectFiles, Collection<File> liferayProjectDirs, File directory,
 		Set<String> directoriesVisited, boolean recurse, IProgressMonitor monitor ) {
@@ -216,6 +183,9 @@ public class ProjectUtil {
 		return true;
 	}
 
+	
+
+	
 	public static String convertToDisplayName( String name ) {
 		if ( CoreUtil.isNullOrEmpty( name ) ) {
 			return "";

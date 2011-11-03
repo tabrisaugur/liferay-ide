@@ -18,7 +18,7 @@ package com.liferay.ide.eclipse.project.ui.wizard;
 import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.project.core.BinaryProjectRecord;
 import com.liferay.ide.eclipse.project.core.ISDKProjectsImportDataModelProperties;
-import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
+import com.liferay.ide.eclipse.project.core.util.ProjectImportUtil;
 import com.liferay.ide.eclipse.project.ui.ProjectUIPlugin;
 import com.liferay.ide.eclipse.ui.util.SWTUtil;
 
@@ -75,13 +75,13 @@ public class BinaryProjectsImportWizardPage extends DataModelFacetCreationWizard
 
 	protected final class BinaryLabelProvider extends StyledCellLabelProvider {
 
-		private static final String ALREADY_EXIST_ELEMENT_COLOR = "already_exist_element_color";
+		private static final String GREY_COLOR = "already_exist_element_color";
 		private final ColorRegistry COLOR_REGISTRY = JFaceResources.getColorRegistry();
-		private final Styler DISABLED_STYLER;
+		private final Styler GREYED_STYLER;
 
 		public BinaryLabelProvider() {
-			COLOR_REGISTRY.put( ALREADY_EXIST_ELEMENT_COLOR, new RGB( 128, 128, 128 ) );
-			DISABLED_STYLER = StyledString.createColorRegistryStyler( ALREADY_EXIST_ELEMENT_COLOR, null );
+			COLOR_REGISTRY.put( GREY_COLOR, new RGB( 128, 128, 128 ) );
+			GREYED_STYLER = StyledString.createColorRegistryStyler( GREY_COLOR, null );
 		}
 
 		/*
@@ -100,15 +100,15 @@ public class BinaryProjectsImportWizardPage extends DataModelFacetCreationWizard
 			if ( binaryProjectRecord.isConflicts() ) {
 				// TODO:show warning that some project exists, similar to what we get when importing projects with
 				// standard import existing project into workspace
-				styledString = new StyledString( binaryProjectRecord.getBinaryName(), DISABLED_STYLER );
-				styledString.append( "(" + binaryProjectRecord.getFilePath() + ")", DISABLED_STYLER );
+				styledString = new StyledString( binaryProjectRecord.getBinaryName(), GREYED_STYLER );
+				styledString.append( " (" + binaryProjectRecord.getFilePath() + ") ", GREYED_STYLER );
 			}
 			else {
 				styledString =
 					new StyledString( binaryProjectRecord.getBinaryName(), StyledString.createColorRegistryStyler(
 						JFacePreferences.CONTENT_ASSIST_FOREGROUND_COLOR,
 						JFacePreferences.CONTENT_ASSIST_BACKGROUND_COLOR ) );
-				styledString.append( "(" + binaryProjectRecord.getFilePath() + ")", StyledString.COUNTER_STYLER );
+				styledString.append( " (" + binaryProjectRecord.getFilePath() + ") ", GREYED_STYLER );
 			}
 
 			cell.setImage( getImage() );
@@ -230,7 +230,7 @@ public class BinaryProjectsImportWizardPage extends DataModelFacetCreationWizard
 
 					if ( dirSelected && directory.isDirectory() ) {
 
-						if ( !ProjectUtil.collectBinariesFromDirectory( projectBinaries, directory, true, monitor ) ) {
+						if ( !ProjectImportUtil.collectBinariesFromDirectory( projectBinaries, directory, true, monitor ) ) {
 							return;
 						}
 

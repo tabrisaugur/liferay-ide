@@ -30,10 +30,18 @@ import com.liferay.ide.eclipse.server.util.ServerUtil;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.filefilter.DirectoryFileFilter;
+import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.osgi.util.NLS;
+import org.eclipse.ui.internal.wizards.datatransfer.DataTransferMessages;
 import org.eclipse.wst.common.componentcore.datamodel.properties.IFacetProjectCreationDataModelProperties;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.common.project.facet.core.runtime.internal.BridgedRuntime;
@@ -69,7 +77,7 @@ public class ProjectImportUtil {
 			// Create Project
 			if ( pluginBinaryRecord.isHook() ) {
 				projectPath = liferaySDK.createNewHookProject( displayName, displayName );
-	
+
 				sdkPluginProjectFolder = sdkPluginProjectFolder.append( ISDKConstants.HOOK_PLUGIN_PROJECT_FOLDER );
 				docrootFolder = IPluginFacetConstants.HOOK_PLUGIN_SDK_CONFIG_FOLDER;
 			}
@@ -78,12 +86,14 @@ public class ProjectImportUtil {
 				String portletFrameworkName = null;
 				for ( int i = 0; i < portletFrameworks.length; i++ ) {
 					IPortletFramework portletFramework = portletFrameworks[i];
-					if(portletFramework.isDefault()){
+					if ( portletFramework.isDefault() ) {
 						portletFrameworkName = portletFramework.getShortName();
 						break;
 					}
 				}
-				projectPath = liferaySDK.createNewPortletProject( displayName, displayName,portletFrameworkName, appServerProperties );
+				projectPath =
+					liferaySDK.createNewPortletProject(
+						displayName, displayName, portletFrameworkName, appServerProperties );
 				sdkPluginProjectFolder = sdkPluginProjectFolder.append( ISDKConstants.PORTLET_PLUGIN_PROJECT_FOLDER );
 				docrootFolder = IPluginFacetConstants.PORTLET_PLUGIN_SDK_CONFIG_FOLDER;
 			}
@@ -97,7 +107,6 @@ public class ProjectImportUtil {
 				sdkPluginProjectFolder = sdkPluginProjectFolder.append( ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_FOLDER );
 				docrootFolder = IPluginFacetConstants.LAYOUTTPL_PLUGIN_SDK_CONFIG_FOLDER;
 			}
-		
 
 			// Move the porject to Liferay SDK location
 			File tempProjectDir = projectPath.append( liferayPluginName ).toFile();
@@ -117,4 +126,40 @@ public class ProjectImportUtil {
 		return projectRecord;
 
 	}
+
+	/**
+	 * This method was added as part of the IDE-381 fix, this method will collect all the binaries based on the binaries
+	 * list
+	 * 
+	 * @return true if the directory has some binaries
+	 */
+	public static boolean collectBinariesFromDirectory(
+		Collection<File> binaryProjectFiles, File directory, boolean recurse, IProgressMonitor monitor ) {
+		if ( monitor.isCanceled() ) {
+			return false;
+		}
+
+		monitor.subTask( NLS.bind( DataTransferMessages.WizardProjectsImportPage_CheckingMessage, directory.getPath() ) );
+
+		List<String> wildCards = Arrays.asList( ISDKConstants.PLUGIN_PROJECT_BINARIES_WILDCARDS );
+
+		WildcardFileFilter wildcardFileFilter = new WildcardFileFilter( wildCards );
+
+		Collection<File> contents = FileUtils.listFiles( directory, wildcardFileFilter, DirectoryFileFilter.INSTANCE );
+
+		if ( contents == null ) {
+			return false;
+		}
+		else {
+
+			for ( File file : contents ) {
+				if ( !binaryProjectFiles.contains( file ) ) {
+					binaryProjectFiles.add( file );
+				}
+			}
+		}
+
+		return true;
+	}
+
 }
