@@ -59,6 +59,8 @@ import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jst.common.project.facet.core.JavaFacet;
+import org.eclipse.jst.j2ee.jsp.JspFactory;
+import org.eclipse.jst.j2ee.jsp.TagLibRefType;
 import org.eclipse.jst.j2ee.project.facet.IJ2EEFacetConstants;
 import org.eclipse.jst.j2ee.project.facet.IJ2EEFacetInstallDataModelProperties;
 import org.eclipse.osgi.util.NLS;
@@ -897,6 +899,26 @@ public class ProjectUtil {
 
 		if ( ddModel != null ) {
 			ddModel.setBooleanProperty( IJ2EEFacetInstallDataModelProperties.GENERATE_DD, generateDD );
+		}
+	}
+
+
+
+
+	public static void addLiferayPortletTldToWebXML( final IProject project )
+	{
+		WebXMLDescriptorHelper webXmlHelper = new WebXMLDescriptorHelper( project );
+	
+		TagLibRefType tagLibRefType = JspFactory.eINSTANCE.createTagLibRefType();
+	
+		tagLibRefType.setTaglibURI("http://java.sun.com/portlet_2_0");
+		tagLibRefType.setTaglibLocation("/WEB-INF/tld/liferay-portlet.tld");
+	
+		try {
+			webXmlHelper.addTagLib(tagLibRefType);
+		}
+		catch (Exception e) {
+			ProjectCorePlugin.logError("Failed to add taglib reference", e);
 		}
 	}
 
