@@ -30,11 +30,13 @@ import org.eclipse.core.runtime.Status;
  */
 public class SocketUtil {
 
-	public static IStatus canConnect(String host, String port) {
+	public static IStatus canConnect( String host, int port )
+	{
 		return canConnect(new Socket(), host, port);
 	}
 
-	public static IStatus canConnect(Socket socket, String host, String port) {
+	public static IStatus canConnect( Socket socket, String host, int port )
+	{
 		IStatus status = null;
 
 		InputStream in = null;

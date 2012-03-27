@@ -17,10 +17,16 @@ package com.liferay.ide.eclipse.server.core;
 
 import java.net.URL;
 
+import org.eclipse.core.runtime.preferences.DefaultScope;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+
 /**
  * @author Greg Amerson
  */
 public interface ILiferayServer {
+
+	@SuppressWarnings( "deprecation" )
+	IEclipsePreferences _defaultPrefs = new DefaultScope().getNode( LiferayServerCorePlugin.PLUGIN_ID );
 
 	URL getPortalHomeUrl();
 
@@ -28,5 +34,21 @@ public interface ILiferayServer {
 
 	URL getPluginContextURL( String context );
 
-	int getHttpPort();
+	String getHttpPort();
+
+	String getHost();
+
+	String getId();
+
+	String ATTR_USERNAME = "username";
+
+	String ATTR_PASSWORD = "password";
+
+	String DEFAULT_USERNAME = _defaultPrefs.get( "default.username", "" );
+
+	String DEFAULT_PASSWORD = _defaultPrefs.get( "default.password", "" );
+
+	String getPassword();
+
+	String getUsername();
 }

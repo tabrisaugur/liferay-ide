@@ -13,29 +13,23 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.eclipse.server.ui.cmd;
+package com.liferay.ide.eclipse.server.remote;
 
-import com.liferay.ide.eclipse.server.remote.IRemoteServerWorkingCopy;
+import com.liferay.ide.eclipse.server.core.ILiferayServer;
+
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 
 /**
  * @author Greg Amerson
  */
-public class SetHttpPortCommand extends RemoteServerCommand {
+public interface ILiferayServerWorkingCopy extends ILiferayServer
+{
 
-	protected String oldHttpPort;
-	protected String httpPort;
+	void setPassword( String password );
 
-	public SetHttpPortCommand( IRemoteServerWorkingCopy server, String httpPort ) {
-		super( server, "Set Http Port" );
-		this.httpPort = httpPort;
-	}
+	void setUsername( String username );
 
-	public void execute() {
-		oldHttpPort = server.getHttpPort();
-		server.setHttpPort( httpPort );
-	}
+	IStatus validate( IProgressMonitor monitor );
 
-	public void undo() {
-		server.setHttpPort( oldHttpPort );
-	}
 }

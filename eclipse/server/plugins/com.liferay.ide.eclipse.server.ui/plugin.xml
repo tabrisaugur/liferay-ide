@@ -195,7 +195,7 @@
             class="com.liferay.ide.eclipse.server.ui.RemoteSettingsEditorSection"
             id="com.liferay.ide.eclipse.server.remote.remoteSettings"
             insertionId="org.eclipse.wst.server.editor.overview.left"
-            order="0"
+            order="1"
             typeIds="com.liferay.ide.eclipse.server.remote">
       </section>
    </extension>

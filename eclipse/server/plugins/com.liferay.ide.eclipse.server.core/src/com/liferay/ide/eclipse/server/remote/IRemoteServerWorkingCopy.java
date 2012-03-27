@@ -15,24 +15,17 @@
 
 package com.liferay.ide.eclipse.server.remote;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
 
 /**
  * @author Greg Amerson
  */
-public interface IRemoteServerWorkingCopy extends IRemoteServer {
+public interface IRemoteServerWorkingCopy extends IRemoteServer, ILiferayServerWorkingCopy
+{
 
-	void setHTTPPort( String httpPort );
+	void setHttpPort( String httpPort );
 
 	void setLiferayPortalContextPath( String path );
 
-	void setPassword( String password );
-
 	void setServerManagerContextPath( String path );
-
-	void setUsername( String username );
-
-	IStatus validate( IProgressMonitor monitor );
 
 }

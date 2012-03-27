@@ -14,13 +14,16 @@
  *******************************************************************************/
 package com.liferay.ide.eclipse.server.tomcat.core;
 
+import com.liferay.ide.eclipse.server.remote.ILiferayServerWorkingCopy;
+
 import org.eclipse.jst.server.tomcat.core.internal.ITomcatServerWorkingCopy;
 
 /**
  * @author Greg Amerson
  */
 @SuppressWarnings("restriction")
-public interface ILiferayTomcatServerWC extends ITomcatServerWorkingCopy {
+public interface ILiferayTomcatServerWC extends ITomcatServerWorkingCopy, ILiferayServerWorkingCopy
+{
 
 	void setMemoryArgs(String memoryArgs);
 

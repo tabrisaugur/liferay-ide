@@ -68,7 +68,17 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
 	}
 
 	public boolean canConnect() {
-		return SocketUtil.canConnect( getServer().getHost(), getRemoteServer().getHTTPPort() ).isOK();
+		Integer port = null;
+
+		try
+		{
+			port = Integer.valueOf( getRemoteServer().getHttpPort() );
+		}
+		catch( Exception e )
+		{
+		}
+
+		return SocketUtil.canConnect( getServer().getHost(), port != null ? port : -1 ).isOK();
 	}
 
 	@Override

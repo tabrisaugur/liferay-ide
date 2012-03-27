@@ -54,7 +54,8 @@ public class RemoteConnection implements IRemoteConnection {
 		this( null, null, null, null, null );
 	}
 
-	public RemoteConnection( String host, String httpPort, String username, String pw, String managerContextPath ) {
+	public RemoteConnection( String host, String httpPort, String username, String pw, String managerContextPath )
+	{
 		this.host = host;
 		this.httpPort = httpPort;
 		this.managerContextPath = managerContextPath;
@@ -282,7 +283,8 @@ public class RemoteConnection implements IRemoteConnection {
 		this.debugPortMethod = null;
 	}
 
-	public void setHttpPort( String httpPort ) {
+	public void setHttpPort( String httpPort )
+	{
 		this.httpPort = httpPort;
 		this.isAliveMethod = null;
 		this.debugPortMethod = null;
@@ -380,7 +382,7 @@ public class RemoteConnection implements IRemoteConnection {
 			HttpClient httpClient2 = new HttpClient();
 			httpClient2.getParams().setAuthenticationPreemptive( true );
 			UsernamePasswordCredentials creds = new UsernamePasswordCredentials( username, password );
-			httpClient2.getState().setCredentials( new AuthScope( host, Integer.parseInt( httpPort ) ), creds );
+			httpClient2.getState().setCredentials( new AuthScope( host, Integer.valueOf( httpPort ) ), creds );
 			return httpClient2;
 		}
 

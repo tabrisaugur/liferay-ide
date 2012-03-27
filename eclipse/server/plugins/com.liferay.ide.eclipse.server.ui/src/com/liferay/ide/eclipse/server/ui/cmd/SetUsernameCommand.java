@@ -11,14 +11,16 @@
 
 package com.liferay.ide.eclipse.server.ui.cmd;
 
-import com.liferay.ide.eclipse.server.remote.IRemoteServerWorkingCopy;
+import com.liferay.ide.eclipse.server.remote.ILiferayServerWorkingCopy;
 
-public class SetUsernameCommand extends RemoteServerCommand {
+public class SetUsernameCommand extends LiferayServerCommand
+{
 
 	protected String oldUsername;
 	protected String username;
 
-	public SetUsernameCommand( IRemoteServerWorkingCopy server, String username ) {
+	public SetUsernameCommand( ILiferayServerWorkingCopy server, String username )
+	{
 		super( server, "Set Username" );
 		this.username = username;
 	}

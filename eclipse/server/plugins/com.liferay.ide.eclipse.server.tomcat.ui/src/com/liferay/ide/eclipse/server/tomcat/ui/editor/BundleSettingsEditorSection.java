@@ -71,7 +71,7 @@ import org.eclipse.wst.server.ui.editor.ServerEditorSection;
  * Portal Tomcat server location editor section
  */
 @SuppressWarnings("restriction")
-public class LiferayServerSettingsEditorSection extends ServerEditorSection {
+public class BundleSettingsEditorSection extends ServerEditorSection {
 	protected Section section;
 	protected LiferayTomcatServer tomcatServer;
 
@@ -110,7 +110,7 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection {
 	/**
 	 * ServerGeneralEditorPart constructor comment.
 	 */
-	public LiferayServerSettingsEditorSection() {
+	public BundleSettingsEditorSection() {
 		// do nothing
 	}
 
@@ -133,29 +133,29 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection {
 				}
 				else if (ILiferayTomcatServer.PROPERTY_AUTO_DEPLOY_DIR.equals(event.getPropertyName())) {
 					String s = (String) event.getNewValue();
-					LiferayServerSettingsEditorSection.this.autoDeployDir.setText(s);
+					BundleSettingsEditorSection.this.autoDeployDir.setText(s);
 					updateDefaultDeployLink();					
 					validate();
 				}
 				else if (ILiferayTomcatServer.PROPERTY_AUTO_DEPLOY_INTERVAL.equals(event.getPropertyName())) {
 					String s = (String) event.getNewValue();
-					LiferayServerSettingsEditorSection.this.autoDeployInterval.setText(s);
+					BundleSettingsEditorSection.this.autoDeployInterval.setText(s);
 					updateDefaultDeployLink();					
 					validate();
 				}
 				else if (ILiferayTomcatServer.PROPERTY_MEMORY_ARGS.equals(event.getPropertyName())) {
 					String s = (String) event.getNewValue();
-					LiferayServerSettingsEditorSection.this.memoryArgs.setText(s);
+					BundleSettingsEditorSection.this.memoryArgs.setText(s);
 					validate();
 				}
 				else if (ILiferayTomcatServer.PROPERTY_USER_TIMEZONE.equals(event.getPropertyName())) {
 					String s = (String) event.getNewValue();
-					LiferayServerSettingsEditorSection.this.userTimezone.setText(s);
+					BundleSettingsEditorSection.this.userTimezone.setText(s);
 					validate();
 				}
 				else if (ILiferayTomcatServer.PROPERTY_EXTERNAL_PROPERTIES.equals(event.getPropertyName())) {
 					String s = (String) event.getNewValue();
-					LiferayServerSettingsEditorSection.this.externalProperties.setText(s);
+					BundleSettingsEditorSection.this.externalProperties.setText(s);
 					validate();
 				}
 				updating = false;
@@ -189,7 +189,7 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection {
 			| ExpandableComposite.TITLE_BAR | Section.DESCRIPTION | ExpandableComposite.FOCUS_TITLE);
 //		section.setText(Messages.serverEditorLocationsSection);
 //		section.setDescription(Messages.serverEditorLocationsDescription);
-		section.setText("Liferay settings");
+		section.setText( "Liferay Bundle Settings" );
 		section.setLayoutData(new GridData(GridData.FILL_HORIZONTAL | GridData.VERTICAL_ALIGN_FILL));
 
 		Composite composite = toolkit.createComposite(section);

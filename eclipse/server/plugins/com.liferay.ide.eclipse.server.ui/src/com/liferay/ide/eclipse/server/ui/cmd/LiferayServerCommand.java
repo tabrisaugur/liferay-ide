@@ -19,35 +19,43 @@ package com.liferay.ide.eclipse.server.ui.cmd;
 
 import com.liferay.ide.eclipse.server.remote.ILiferayServerWorkingCopy;
 
+import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.commands.operations.AbstractOperation;
+import org.eclipse.core.runtime.IAdaptable;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+
 /**
- * @author Greg Amerson
+ * A command on a Liferay server.
  */
-public class SetPasswordCommand extends LiferayServerCommand
+public abstract class LiferayServerCommand extends AbstractOperation
 {
+	protected ILiferayServerWorkingCopy server;
 
-	protected String oldPassword;
-	protected String password;
-
-	public SetPasswordCommand( ILiferayServerWorkingCopy server, String password )
+	public LiferayServerCommand( ILiferayServerWorkingCopy server, String label )
 	{
-		super( server, "Set Password" );
-		this.password = password;
+		super( label );
+		this.server = server;
 	}
 
-	/**
-	 * Execute setting the memory args
-	 */
-	public void execute()
+	public IStatus redo( IProgressMonitor monitor, IAdaptable info ) throws ExecutionException
 	{
-		oldPassword = server.getPassword();
-		server.setPassword( password );
+		return execute( monitor, info );
 	}
 
-	/**
-	 * Restore prior memoryargs
-	 */
-	public void undo()
+	public abstract void execute();
+
+	public IStatus execute( IProgressMonitor monitor, IAdaptable info ) throws ExecutionException
 	{
-		server.setPassword( oldPassword );
+		execute();
+		return null;
+	}
+
+	public abstract void undo();
+
+	public IStatus undo( IProgressMonitor monitor, IAdaptable info ) throws ExecutionException
+	{
+		undo();
+		return null;
 	}
 }

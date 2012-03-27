@@ -15,14 +15,9 @@
 
 package com.liferay.ide.eclipse.server.ui;
 
-import com.liferay.ide.eclipse.server.core.LiferayServerCorePlugin;
+import com.liferay.ide.eclipse.server.remote.ILiferayServerWorkingCopy;
 import com.liferay.ide.eclipse.server.remote.IRemoteServer;
-import com.liferay.ide.eclipse.server.remote.RemoteServer;
-import com.liferay.ide.eclipse.server.ui.cmd.SetAdjustDeploymentTimestampCommand;
-import com.liferay.ide.eclipse.server.ui.cmd.SetHttpPortCommand;
-import com.liferay.ide.eclipse.server.ui.cmd.SetLiferayPortalContextPathCommand;
 import com.liferay.ide.eclipse.server.ui.cmd.SetPasswordCommand;
-import com.liferay.ide.eclipse.server.ui.cmd.SetServerManagerContextPathCommand;
 import com.liferay.ide.eclipse.server.ui.cmd.SetUsernameCommand;
 
 import java.beans.PropertyChangeEvent;
@@ -37,11 +32,8 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
@@ -56,20 +48,16 @@ import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.wst.server.ui.editor.ServerEditorSection;
 
 
-public class RemoteSettingsEditorSection extends ServerEditorSection {
+public class AdminSettingsEditorSection extends ServerEditorSection {
 
-	protected Button adjustTimestamp;
 	protected PropertyChangeListener listener;
-	protected RemoteServer remoteServer;
-	protected Section remoteSettings;
-	protected Text textHttpPort;
-	protected Text textLiferayPortalContextPath;
+	protected ILiferayServerWorkingCopy liferayServer;
+	protected Section adminSettings;
 	protected Text textPassword;
-	protected Text textServerManagerContextPath;
 	protected Text textUsername;
 	protected boolean updating = false;
 
-	public RemoteSettingsEditorSection() {
+	public AdminSettingsEditorSection() {
 		super();
 	}
 
@@ -77,34 +65,12 @@ public class RemoteSettingsEditorSection extends ServerEditorSection {
 	public void createSection( Composite parent ) {
 		FormToolkit toolkit = getFormToolkit( parent.getDisplay() );
 
-		remoteSettings = createSettingsSection( parent, toolkit );
-		remoteSettings.setText( "Remote Liferay Settings" );
-		remoteSettings.setLayoutData( new GridData( GridData.FILL_HORIZONTAL | GridData.VERTICAL_ALIGN_FILL ) );
-		remoteSettings.setDescription( "Specify settings for remote Liferay Portal server." );
+		adminSettings = createSettingsSection( parent, toolkit );
+		adminSettings.setText( "Liferay Admin Settings" );
+		adminSettings.setLayoutData( new GridData( GridData.FILL_HORIZONTAL | GridData.VERTICAL_ALIGN_FILL ) );
+		adminSettings.setDescription( "Specify admin settings for Liferay Portal server." );
 
-		Composite settingsComposite = createSectionComposite( toolkit, remoteSettings );
-
-		Label soapPortLabel = createLabel( toolkit, settingsComposite, "HTTP Port:" );
-		soapPortLabel.setLayoutData( new GridData( SWT.BEGINNING, SWT.CENTER, false, false ) );
-
-		textHttpPort = toolkit.createText( settingsComposite, null );
-		GridData data = new GridData( SWT.FILL, SWT.TOP, true, false );
-		data.widthHint = 50;
-		textHttpPort.setLayoutData( data );
-		textHttpPort.addModifyListener( new ModifyListener() {
-
-			public void modifyText( ModifyEvent e ) {
-				if ( updating ) {
-					return;
-				}
-
-				updating = true;
-				execute( new SetHttpPortCommand( remoteServer, textHttpPort.getText().trim() ) );
-				updating = false;
-				// validate();
-			}
-
-		} );
+		Composite settingsComposite = createSectionComposite( toolkit, adminSettings );
 
 		Label usernameLabel = createLabel( toolkit, settingsComposite, "Username:" );
 		usernameLabel.setLayoutData( new GridData( SWT.BEGINNING, SWT.CENTER, false, false ) );
@@ -119,7 +85,7 @@ public class RemoteSettingsEditorSection extends ServerEditorSection {
 				}
 
 				updating = true;
-				execute( new SetUsernameCommand( remoteServer, textUsername.getText().trim() ) );
+				execute( new SetUsernameCommand( liferayServer, textUsername.getText().trim() ) );
 				updating = false;
 				// validate();
 			}
@@ -139,70 +105,11 @@ public class RemoteSettingsEditorSection extends ServerEditorSection {
 				}
 
 				updating = true;
-				execute( new SetPasswordCommand( remoteServer, textPassword.getText().trim() ) );
+				execute( new SetPasswordCommand( liferayServer, textPassword.getText().trim() ) );
 				updating = false;
 				// validate();
 			}
 
-		} );
-
-		Label labelLiferayPortalContextPath = createLabel( toolkit, settingsComposite, "Liferay Portal Context Path:" );
-		labelLiferayPortalContextPath.setLayoutData( new GridData( SWT.BEGINNING, SWT.CENTER, false, false ) );
-
-		textLiferayPortalContextPath = toolkit.createText( settingsComposite, null );
-		textLiferayPortalContextPath.setLayoutData( new GridData( SWT.FILL, SWT.TOP, true, false ) );
-		textLiferayPortalContextPath.addModifyListener( new ModifyListener() {
-
-			public void modifyText( ModifyEvent e ) {
-				if ( updating ) {
-					return;
-				}
-
-				updating = true;
-				execute( new SetLiferayPortalContextPathCommand(
-					remoteServer, textLiferayPortalContextPath.getText().trim() ) );
-				updating = false;
-				// validate();
-			}
-		} );
-
-		Label labelServerManagerContextPath = createLabel( toolkit, settingsComposite, "Server Manager Context Path:" );
-		labelServerManagerContextPath.setLayoutData( new GridData( SWT.LEFT, SWT.CENTER, false, false ) );
-
-		textServerManagerContextPath = toolkit.createText( settingsComposite, null );
-		textServerManagerContextPath.setLayoutData( new GridData( SWT.FILL, SWT.TOP, true, false ) );
-		textServerManagerContextPath.addModifyListener( new ModifyListener() {
-
-			public void modifyText( ModifyEvent e ) {
-				if ( updating ) {
-					return;
-				}
-
-				updating = true;
-				execute( new SetServerManagerContextPathCommand(
-					remoteServer, textServerManagerContextPath.getText().trim() ) );
-				updating = false;
-				// validate();
-			}
-		} );
-
-		adjustTimestamp =
-			toolkit.createButton(
-				settingsComposite, "Adjust deployment timestamps to GMT timezone (Liferay default)", SWT.CHECK );
-		GridData gd = new GridData( SWT.FILL, SWT.CENTER, true, false );
-		gd.horizontalSpan = 2;
-		adjustTimestamp.setLayoutData( gd );
-		adjustTimestamp.addSelectionListener( new SelectionAdapter() {
-
-			public void widgetSelected( SelectionEvent e ) {
-				if ( updating ) {
-					return;
-				}
-
-				updating = true;
-				execute( new SetAdjustDeploymentTimestampCommand( remoteServer, adjustTimestamp.getSelection() ) );
-				updating = false;
-			}
 		} );
 
 		initialize();
@@ -211,7 +118,7 @@ public class RemoteSettingsEditorSection extends ServerEditorSection {
 
 		if ( !status.isOK() ) {
 			this.getManagedForm().getMessageManager().addMessage(
-				remoteServer, status.getMessage(), status,
+				liferayServer, status.getMessage(), status,
 				status.getSeverity() == IStatus.ERROR ? IMessageProvider.ERROR : IMessageProvider.WARNING );
 		}
 	}
@@ -222,11 +129,11 @@ public class RemoteSettingsEditorSection extends ServerEditorSection {
 
 		if ( !status.isOK() ) {
 			this.getManagedForm().getMessageManager().addMessage(
-				remoteServer, status.getMessage(), status,
+				liferayServer, status.getMessage(), status,
 				status.getSeverity() == IStatus.ERROR ? IMessageProvider.ERROR : IMessageProvider.WARNING );
 		}
 		else {
-			this.getManagedForm().getMessageManager().removeMessage( remoteServer );
+			this.getManagedForm().getMessageManager().removeMessage( liferayServer );
 		}
 
 		return new IStatus[] { Status.OK_STATUS };
@@ -236,7 +143,7 @@ public class RemoteSettingsEditorSection extends ServerEditorSection {
 		super.init( site, input );
 
 		if ( server != null ) {
-			remoteServer = (RemoteServer) server.loadAdapter( RemoteServer.class, null );
+			liferayServer = (ILiferayServerWorkingCopy) server.loadAdapter( ILiferayServerWorkingCopy.class, null );
 			addChangeListeners();
 		}
 
@@ -247,7 +154,7 @@ public class RemoteSettingsEditorSection extends ServerEditorSection {
 		listener = new PropertyChangeListener() {
 
 			public void propertyChange( final PropertyChangeEvent event ) {
-				LiferayServerCorePlugin.updateConnectionSettings( remoteServer );
+				// LiferayServerCorePlugin.updateConnectionSettings( liferayServer );
 
 				if ( updating ) {
 					return;
@@ -258,29 +165,13 @@ public class RemoteSettingsEditorSection extends ServerEditorSection {
 				Display.getDefault().syncExec( new Runnable() {
 
 					public void run() {
-						if ( IRemoteServer.ATTR_ADJUST_DEPLOYMENT_TIMESTAMP.equals( event.getPropertyName() ) ) {
-							String s = (String) event.getNewValue();
-							adjustTimestamp.setSelection( Boolean.parseBoolean( s ) );
-						}
-						else if ( IRemoteServer.ATTR_USERNAME.equals( event.getPropertyName() ) ) {
+						if ( IRemoteServer.ATTR_USERNAME.equals( event.getPropertyName() ) ) {
 							String s = (String) event.getNewValue();
 							textUsername.setText( s );
 						}
 						else if ( IRemoteServer.ATTR_PASSWORD.equals( event.getPropertyName() ) ) {
 							String s = (String) event.getNewValue();
 							textPassword.setText( s );
-						}
-						else if ( IRemoteServer.ATTR_HTTP_PORT.equals( event.getPropertyName() ) ) {
-							String s = (String) event.getNewValue();
-							textHttpPort.setText( s );
-						}
-						else if ( IRemoteServer.ATTR_LIFERAY_PORTAL_CONTEXT_PATH.equals( event.getPropertyName() ) ) {
-							String s = (String) event.getNewValue();
-							textLiferayPortalContextPath.setText( s );
-						}
-						else if ( IRemoteServer.ATTR_SERVER_MANAGER_CONTEXT_PATH.equals( event.getPropertyName() ) ) {
-							String s = (String) event.getNewValue();
-							textServerManagerContextPath.setText( s );
 						}
 					}
 				} );
@@ -319,26 +210,16 @@ public class RemoteSettingsEditorSection extends ServerEditorSection {
 	}
 
 	protected void initialize() {
-		if ( remoteServer == null || textHttpPort == null || adjustTimestamp == null || textUsername == null ||
-			textPassword == null || textLiferayPortalContextPath == null || textServerManagerContextPath == null ) {
+		if( liferayServer == null || textUsername == null || textPassword == null )
+		{
 			return;
 		}
 
 		updating = true;
 
-		textHttpPort.setText( String.valueOf( remoteServer.getHttpPort() ) );
+		textUsername.setText( liferayServer.getUsername() );
 
-		textUsername.setText( remoteServer.getUsername() );
-
-		textPassword.setText( remoteServer.getPassword() );
-
-		textLiferayPortalContextPath.setText( remoteServer.getLiferayPortalContextPath() );
-
-		textServerManagerContextPath.setText( remoteServer.getServerManagerContextPath() );
-
-		boolean adjustGMTOffset = remoteServer.getAdjustDeploymentTimestamp();
-
-		adjustTimestamp.setSelection( adjustGMTOffset );
+		textPassword.setText( liferayServer.getPassword() );
 
 		updating = false;
 	}
@@ -351,7 +232,7 @@ public class RemoteSettingsEditorSection extends ServerEditorSection {
 
 				public void run( IProgressMonitor monitor ) throws InvocationTargetException, InterruptedException {
 
-					status[0] = remoteServer.validate( monitor );
+					status[0] = liferayServer.validate( monitor );
 				}
 			} );
 		}

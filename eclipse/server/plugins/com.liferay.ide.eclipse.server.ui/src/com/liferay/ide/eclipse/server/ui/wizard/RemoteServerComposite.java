@@ -98,7 +98,7 @@ public class RemoteServerComposite extends Composite implements ModifyListener, 
 
 		}
 		else if (src.equals(textHTTP)) {
-			this.remoteServerWC.setHTTPPort( textHTTP.getText() );
+			this.remoteServerWC.setHttpPort( textHTTP.getText() );
 		}
 		else if ( src.equals( textServerManagerContextPath ) ) {
 			this.remoteServerWC.setServerManagerContextPath( textServerManagerContextPath.getText() );
@@ -250,7 +250,7 @@ public class RemoteServerComposite extends Composite implements ModifyListener, 
 		if ( this.serverWC != null && this.remoteServerWC != null ) {
 			ignoreModifyEvents = true;
 			this.textHostname.setText(this.serverWC.getHost());
-			this.textHTTP.setText( this.remoteServerWC.getHTTPPort() );
+			this.textHTTP.setText( this.remoteServerWC.getHttpPort() );
 			this.textLiferayPortalContextPath.setText( this.remoteServerWC.getLiferayPortalContextPath() );
 			this.textServerManagerContextPath.setText( this.remoteServerWC.getServerManagerContextPath() );
 			// this.checkboxSecurity.setSelection( this.remoteServerWC.getSecurityEnabled() );
@@ -343,7 +343,7 @@ public class RemoteServerComposite extends Composite implements ModifyListener, 
 			return LiferayServerUIPlugin.createErrorStatus( "Must specify username and password" );
 		}
 
-		String port = remoteServerWC.getHTTPPort();
+		String port = remoteServerWC.getHttpPort();
 
 		if (CoreUtil.isNullOrEmpty(port)) {
 			return LiferayServerUIPlugin.createErrorStatus( "Must specify HTTP port" );

@@ -46,6 +46,16 @@ public class LiferayTomcatServer extends TomcatServer
 		super();
 	}
 
+	public String getId()
+	{
+		return getServer().getId();
+	}
+
+	public String getHost()
+	{
+		return getServer().getHost();
+	}
+
 	public String getAutoDeployDirectory() {
 		return getAttribute(PROPERTY_AUTO_DEPLOY_DIR, "../deploy");
 	}
@@ -56,6 +66,16 @@ public class LiferayTomcatServer extends TomcatServer
 
 	public String getExternalProperties() {
 		return getAttribute(PROPERTY_EXTERNAL_PROPERTIES, "");
+	}
+
+	public void setPassword( String pw )
+	{
+		setAttribute( ATTR_PASSWORD, pw );
+	}
+
+	public void setUsername( String username )
+	{
+		setAttribute( ATTR_USERNAME, username );
 	}
 
 	public String getMemoryArgs() {
@@ -74,15 +94,25 @@ public class LiferayTomcatServer extends TomcatServer
 		}
 	}
 
-	public int getHttpPort()
+	public String getUsername()
+	{
+		return getAttribute( ATTR_USERNAME, DEFAULT_USERNAME );
+	}
+
+	public String getPassword()
+	{
+		return getAttribute( ATTR_PASSWORD, DEFAULT_PASSWORD );
+	}
+
+	public String getHttpPort()
 	{
 		try
 		{
-			return getTomcatConfiguration().getMainPort().getPort();
+			return String.valueOf( getTomcatConfiguration().getMainPort().getPort() );
 		}
 		catch ( Exception e )
 		{
-			return -1;
+			return "-1";
 		}
 	}
 
@@ -318,6 +348,11 @@ public class LiferayTomcatServer extends TomcatServer
 
 	protected IPersistentPreferenceStore getPrefStore() {
 		return LiferayTomcatPlugin.getPreferenceStore();
+	}
+
+	public IStatus validate( IProgressMonitor monitor )
+	{
+		return Status.OK_STATUS;
 	}
 
 }

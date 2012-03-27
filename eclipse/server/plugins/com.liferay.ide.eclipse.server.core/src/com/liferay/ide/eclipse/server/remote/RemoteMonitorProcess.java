@@ -101,10 +101,10 @@ public class RemoteMonitorProcess extends Process implements IProcess {
 			IRemoteServer wasServer = RemoteUtil.getRemoteServer( server );
 
 			if (wasServer != null) {
-				port = wasServer.getHTTPPort();
+				port = wasServer.getHttpPort();
 			}
 
-			this.label = (host != null ? host : "") + ":" + (port != null ? port : "");
+			this.label = ( host != null ? host : "" ) + ":" + ( port != null ? port : "" );
 		}
 
 		return this.label;

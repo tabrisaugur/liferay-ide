@@ -54,7 +54,7 @@ public class RemoteServer extends ServerDelegate implements IRemoteServerWorking
 
 	public boolean canMakeHttpConnection() {
 		String host = getServer().getHost();
-		String http = getHTTPPort();
+		String http = getHttpPort();
 
 		final Socket socket = new Socket();
 
@@ -75,7 +75,7 @@ public class RemoteServer extends ServerDelegate implements IRemoteServerWorking
 		IStatus status = null;
 
 		try {
-			status = SocketUtil.canConnect( socket, host, http );
+			status = SocketUtil.canConnect( socket, host, Integer.valueOf( http ) );
 		}
 		catch ( Exception e ) {
 		}
@@ -169,12 +169,8 @@ public class RemoteServer extends ServerDelegate implements IRemoteServerWorking
 		return getServer().getHost();
 	}
 
-	public int getHttpPort()
+	public String getHttpPort()
 	{
-		return Integer.parseInt( getHTTPPort() );
-	}
-
-	public String getHTTPPort() {
 		return getAttribute( ATTR_HTTP_PORT, DEFAULT_HTTP_PORT );
 	}
 
@@ -196,9 +192,9 @@ public class RemoteServer extends ServerDelegate implements IRemoteServerWorking
 
 	public URL getPluginContextURL( String context )
 	{
-		String httpPort = getHTTPPort();
+		String httpPort = getHttpPort();
 
-		if ( httpPort != null )
+		if( httpPort != null )
 		{
 			try
 			{
@@ -213,10 +209,11 @@ public class RemoteServer extends ServerDelegate implements IRemoteServerWorking
 	}
 
 	public URL getPortalHomeUrl() {
-		String httpPort = getHTTPPort();
+		String httpPort = getHttpPort();
 		String contextUrl = getLiferayPortalContextPath();
 
-		if ( httpPort != null && ( !CoreUtil.isNullOrEmpty( contextUrl ) ) ) {
+		if( httpPort != null && ( !CoreUtil.isNullOrEmpty( contextUrl ) ) )
+		{
 			try {
 				return new URL( "http://" + getServer().getHost() + ":" + httpPort + contextUrl );
 			}
@@ -251,7 +248,7 @@ public class RemoteServer extends ServerDelegate implements IRemoteServerWorking
 
 	public URL getWebServicesListURL() {
 		try {
-			return new URL( "http://" + getServer().getHost() + ":" + getHTTPPort() + "/tunnel-web/axis" );
+			return new URL( "http://" + getServer().getHost() + ":" + getHttpPort() + "/tunnel-web/axis" );
 		}
 		catch ( MalformedURLException e ) {
 			LiferayServerCorePlugin.logError( "Unable to get web services list URL", e );
@@ -308,7 +305,8 @@ public class RemoteServer extends ServerDelegate implements IRemoteServerWorking
 		getServerWorkingCopy().setName( defaultName );
 	}
 
-	public void setHTTPPort( String httpPort ) {
+	public void setHttpPort( String httpPort )
+	{
 		setAttribute( ATTR_HTTP_PORT, httpPort );
 	}
 
@@ -335,12 +333,12 @@ public class RemoteServer extends ServerDelegate implements IRemoteServerWorking
 			String host = getServerWorkingCopy().getHost();
 
 			if ( monitor != null ) {
-				monitor.beginTask( "Validating connection to " + host + ":" + getHTTPPort(), IProgressMonitor.UNKNOWN );
+				monitor.beginTask( "Validating connection to " + host + ":" + getHttpPort(), IProgressMonitor.UNKNOWN );
 			}
 
 			if ( !canMakeHttpConnection() ) {
 				return LiferayServerCorePlugin.createWarningStatus( "Server is not available at " + host + ":" +
-					getHTTPPort() );
+					getHttpPort() );
 			}
 
 			IRemoteConnection connection = LiferayServerCorePlugin.getRemoteConnection( this );

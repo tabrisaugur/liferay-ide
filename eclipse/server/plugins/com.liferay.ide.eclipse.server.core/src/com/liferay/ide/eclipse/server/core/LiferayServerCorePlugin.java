@@ -261,7 +261,7 @@ public class LiferayServerCorePlugin extends CorePlugin {
 
 	public static void updateConnectionSettings( IRemoteServer server, IRemoteConnection remoteConnection ) {
 		remoteConnection.setHost( server.getHost() );
-		remoteConnection.setHttpPort( server.getHTTPPort() );
+		remoteConnection.setHttpPort( server.getHttpPort() );
 		remoteConnection.setManagerContextPath( server.getServerManagerContextPath() );
 		remoteConnection.setUsername( server.getUsername() );
 		remoteConnection.setPassword( server.getPassword() );
